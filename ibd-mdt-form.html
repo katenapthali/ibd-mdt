@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBD MDT Case Submission</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --mint:        #E4FDE1;
+  --green:       #8ACB88;
+  --teal:        #648381;
+  --charcoal:    #575761;
+  --gold:        #FFBF46;
+  --teal-dark:   #4a6260;
+  --teal-deep:   #324f4d;
+  --teal-light:  #e8f2f1;
+  --green-light: #f0faf0;
+  --mint-mid:    #c8f5c4;
+  --gold-light:  #fff8e6;
+  --red:         #c0392b;
+  --red-light:   #fdf0ee;
+  --white:       #ffffff;
+  --off-white:   #f8fdf7;
+  --surface:     #f2f7f2;
+  --border:      #d4ead2;
+  --border-mid:  #bcd9ba;
+  --text:        #2c2c35;
+  --text-mid:    #575761;
+  --text-muted:  #8a8a96;
+  --radius:      8px;
+  --radius-lg:   14px;
+  --shadow-sm:   0 1px 3px rgba(100,131,129,0.10);
+  --shadow-md:   0 4px 16px rgba(100,131,129,0.14);
+}
+
+html { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--off-white); }
+body { min-height: 100vh; padding: 0 0 4rem; }
+
+/* ── SITE HEADER ─────────────────────────────────── */
+.site-header {
+  background: var(--teal-deep);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.header-back {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none; color: rgba(255,255,255,0.65);
+  font-size: 12px; font-weight: 500;
+  transition: color 0.15s;
+}
+.header-back:hover { color: white; }
+.header-title { font-size: 13px; font-weight: 700; color: white; }
+.header-badge {
+  font-size: 10px; font-weight: 600; color: var(--gold);
+  background: rgba(255,191,70,0.12); border: 1px solid rgba(255,191,70,0.25);
+  padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ── PAGE WRAP ───────────────────────────────────── */
+.page-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
+
+/* ── FORM CARD ───────────────────────────────────── */
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── FORM HEADER ─────────────────────────────────── */
+.form-head {
+  background: linear-gradient(135deg, var(--teal-deep) 0%, var(--teal) 100%);
+  padding: 1.75rem 2rem 1.5rem;
+  position: relative; overflow: hidden;
+}
+.form-head::before {
+  content: '';
+  position: absolute; top: -30px; right: -30px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(138,203,136,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.form-head-inner { position: relative; }
+.form-head h1 { font-size: 18px; font-weight: 800; color: white; letter-spacing: -0.02em; margin-bottom: 4px; }
+.form-head p { font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 400; }
+.form-head-meta { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.meta-pill {
+  font-size: 10px; font-weight: 600;
+  background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+  padding: 3px 10px; border-radius: 100px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
+/* ── PROGRESS ────────────────────────────────────── */
+.progress-track { height: 3px; background: rgba(255,255,255,0.12); }
+.progress-fill { height: 3px; background: var(--green); transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+
+/* ── STEP NAV ────────────────────────────────────── */
+.step-nav {
+  display: flex; overflow-x: auto;
+  padding: 0 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none; gap: 2px;
+}
+.step-nav::-webkit-scrollbar { display: none; }
+.step-tab {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  padding: 10px 12px; white-space: nowrap;
+  border-bottom: 2px solid transparent; flex-shrink: 0;
+  transition: color 0.15s; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.step-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+.step-tab.done { color: var(--green); }
+.step-tab.done .step-num { background: var(--green); color: white; }
+.step-num {
+  width: 16px; height: 16px;
+  background: var(--border);
+  border-radius: 50%;
+  font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.step-tab.active .step-num { background: var(--teal); color: white; }
+
+/* ── SECTION HEADER ──────────────────────────────── */
+.sec-header {
+  padding: 10px 1.75rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--teal-light);
+  flex-shrink: 0;
+}
+.sec-title { font-size: 11px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── FIELDS ──────────────────────────────────────── */
+.field { padding: 16px 1.75rem; border-bottom: 1px solid var(--border); }
+.field:last-of-type { border-bottom: none; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 1.75rem; border-bottom: 1px solid var(--border); }
+
+.label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.req { color: var(--red); font-size: 12px; }
+.hint { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.5; }
+
+/* ── INPUTS ──────────────────────────────────────── */
+input[type=text], input[type=email], input[type=date], input[type=number], select, textarea {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text); background: var(--white);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.4;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(100,131,129,0.12);
+}
+input.err, select.err, textarea.err {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(192,57,43,0.08);
+}
+textarea { resize: vertical; min-height: 72px; }
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23648381' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+/* ── PILL TOGGLES (multi-select) ─────────────────── */
+.pill-group { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill-toggle { position: relative; }
+.pill-toggle input[type=checkbox] { position: absolute; opacity: 0; width: 0; height: 0; }
+.pill-toggle label {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px; font-weight: 500; color: var(--text-mid);
+  cursor: pointer;
+  background: white;
+  transition: all 0.15s;
+  user-select: none;
+  line-height: 1;
+}
+.pill-toggle label:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+.pill-toggle input:checked + label {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+.pill-toggle input:checked + label .pill-check { display: block; }
+.pill-check { display: none; flex-shrink: 0; }
+
+/* ── RADIO BUTTONS ───────────────────────────────── */
+.radio-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-opt { position: relative; }
+.radio-opt input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio-opt label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px; font-weight: 500; color: var(--text-mid);
+  cursor: pointer; background: white;
+  transition: all 0.15s;
+}
+.radio-opt label:hover { border-color: var(--teal); background: var(--teal-light); }
+.radio-opt input:checked + label {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  color: var(--teal-dark);
+  font-weight: 600;
+}
+.radio-dot {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border-mid);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.radio-opt input:checked + label .radio-dot {
+  border-color: var(--teal);
+  background: var(--teal);
+}
+.radio-dot-inner {
+  width: 6px; height: 6px;
+  background: white; border-radius: 50%;
+  opacity: 0; transition: opacity 0.15s;
+}
+.radio-opt input:checked + label .radio-dot-inner { opacity: 1; }
+.radio-opt label .radio-icon { color: var(--text-muted); flex-shrink: 0; }
+.radio-opt input:checked + label .radio-icon { color: var(--teal); }
+
+/* ── TOGGLE SWITCH (yes/no) ──────────────────────── */
+.toggle-group { display: flex; gap: 8px; }
+.toggle-opt { position: relative; }
+.toggle-opt input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+.toggle-opt label {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; background: white;
+  transition: all 0.15s; min-width: 80px; justify-content: center;
+}
+.toggle-opt label:hover { border-color: var(--teal); color: var(--teal); }
+.toggle-opt input:checked + label {
+  background: var(--teal); border-color: var(--teal); color: white;
+}
+.toggle-opt.yes input:checked + label { background: var(--teal); border-color: var(--teal); }
+.toggle-opt.no input:checked + label { background: var(--charcoal); border-color: var(--charcoal); }
+
+/* ── SUB-PANEL ───────────────────────────────────── */
+.sub-panel {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: var(--teal-light);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.sub-panel .label { font-size: 12px; color: var(--teal-dark); }
+
+/* ── BLOOD GRID ──────────────────────────────────── */
+.blood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.blood-item label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; font-weight: 600; letter-spacing: 0.02em; }
+.blood-item input { padding: 7px 10px; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── SUBGROUP LABEL ──────────────────────────────── */
+.subgroup { font-size: 10px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 8px; display: flex; align-items: center; gap: 8px; }
+.subgroup::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.subgroup:first-child { margin-top: 0; }
+
+/* ── NOTICE ──────────────────────────────────────── */
+.notice {
+  font-size: 12px; color: var(--teal-dark);
+  background: var(--green-light);
+  border-radius: var(--radius); padding: 10px 14px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 8px;
+  line-height: 1.6;
+}
+.notice svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ── ERR ─────────────────────────────────────────── */
+.err-msg { font-size: 11px; color: var(--red); margin-top: 6px; display: none; font-style: italic; display: none; align-items: center; gap: 5px; }
+.err-msg.show { display: flex; }
+
+/* ── FORM NAV ────────────────────────────────────── */
+.form-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 1.75rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 9px 22px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-mid);
+  transition: all 0.12s; display: flex; align-items: center; gap: 7px;
+}
+.btn:hover { background: var(--surface); border-color: var(--border-mid); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-primary { background: var(--teal); color: white; border-color: var(--teal); }
+.btn-primary:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+.step-info { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+.hidden { display: none !important; }
+
+/* ── CESSATION ───────────────────────────────────── */
+.cessation-block {
+  margin-top: 10px; padding: 12px 14px;
+  background: var(--teal-light);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* ── SUCCESS ─────────────────────────────────────── */
+.success-wrap { padding: 2.5rem 2rem 2rem; }
+.success-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--green-light); border: 2px solid var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+.success-wrap h2 { font-size: 18px; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 8px; letter-spacing: -0.02em; }
+.success-wrap .sub-text { font-size: 13px; color: var(--text-muted); max-width: 440px; margin: 0 auto 2rem; line-height: 1.7; text-align: center; }
+
+/* ── SUMMARY CARD ────────────────────────────────── */
+.summary-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem;
+}
+.summary-head {
+  background: var(--teal); color: white;
+  padding: 11px 16px; font-size: 12px; font-weight: 700;
+  display: flex; justify-content: space-between; align-items: center;
+  letter-spacing: 0.02em;
+}
+.copy-btn {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: white; padding: 4px 12px; border-radius: 5px;
+  font-size: 11px; font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; transition: background 0.12s; font-weight: 600;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.25); }
+.copy-btn.copied { background: var(--green); border-color: var(--green); }
+.summary-body { padding: 14px 16px; }
+.sum-row { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.sum-row:last-child { border-bottom: none; }
+.sum-key { color: var(--text-muted); min-width: 160px; flex-shrink: 0; font-size: 11px; font-weight: 600; padding-top: 1px; letter-spacing: 0.02em; }
+.sum-val { color: var(--text); font-weight: 500; line-height: 1.6; }
+.sum-section {
+  font-size: 10px; font-weight: 700; color: var(--teal);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 10px 0 4px; margin-top: 6px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.sum-section:first-child { margin-top: 0; padding-top: 2px; }
+.triage-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 100px;
+}
+.triage-1 { background: #fdecea; color: #b71c1c; }
+.triage-2 { background: var(--gold-light); color: #a06c00; }
+.triage-3 { background: var(--teal-light); color: var(--teal-dark); }
+.triage-4 { background: var(--surface); color: var(--text-muted); }
+
+/* ── AI PANEL ────────────────────────────────────── */
+.ai-panel {
+  background: #0f1419; border: 1px solid #2a3441;
+  border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem;
+}
+.ai-panel-header {
+  background: #161d27; border-bottom: 1px solid #2a3441;
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+}
+.ai-panel-title { display: flex; align-items: center; gap: 10px; }
+.ai-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(138,203,136,0.12); border: 1px solid rgba(138,203,136,0.25);
+  border-radius: 4px; padding: 3px 8px;
+  font-size: 10px; font-weight: 700; color: #8ACB88;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ai-badge-dot { width: 6px; height: 6px; background: #8ACB88; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.ai-panel-title h3 { font-size: 13px; font-weight: 700; color: #e6edf3; }
+.ai-copy-btn {
+  background: rgba(255,255,255,0.06); border: 1px solid #2a3441;
+  color: #8b949e; padding: 4px 12px; border-radius: 4px;
+  font-size: 11px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
+  transition: all 0.12s;
+}
+.ai-copy-btn:hover { background: rgba(255,255,255,0.1); color: #e6edf3; }
+.ai-copy-btn.copied { background: rgba(138,203,136,0.15); border-color: rgba(138,203,136,0.4); color: #8ACB88; }
+.ai-loading { padding: 32px 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.ai-spinner { width: 32px; height: 32px; border: 2px solid rgba(138,203,136,0.15); border-top-color: #8ACB88; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.ai-loading-steps { display: flex; flex-direction: column; gap: 6px; }
+.ai-loading-step {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 11px; font-weight: 500; color: #4a5568; opacity: 0.4;
+  transition: opacity 0.3s;
+}
+.ai-loading-step.active { opacity: 1; color: #8ACB88; }
+.ai-loading-step.done { opacity: 0.7; color: #648381; }
+.ai-error { padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.ai-error-msg { font-size: 12px; color: #8b949e; max-width: 360px; line-height: 1.6; }
+.ai-retry-btn {
+  background: rgba(192,57,43,0.12); border: 1px solid rgba(192,57,43,0.3);
+  color: #f85149; padding: 7px 18px; border-radius: var(--radius);
+  font-size: 12px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
+}
+.ai-section { border-bottom: 1px solid #1e2a36; }
+.ai-section:last-child { border-bottom: none; }
+.ai-section-header {
+  padding: 11px 16px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; user-select: none; transition: background 0.12s;
+}
+.ai-section-header:hover { background: rgba(255,255,255,0.02); }
+.ai-section-icon {
+  width: 26px; height: 26px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.icon-s { background: rgba(100,131,129,0.2); }
+.icon-risk { background: rgba(255,191,70,0.15); }
+.icon-bio { background: rgba(138,203,136,0.15); }
+.icon-pf { background: rgba(100,131,129,0.15); }
+.icon-a { background: rgba(255,191,70,0.15); }
+.icon-t { background: rgba(138,203,136,0.15); }
+.icon-d { background: rgba(138,203,136,0.1); }
+.ai-section-title { font-size: 12px; font-weight: 700; color: #e6edf3; flex: 1; letter-spacing: 0.01em; }
+.ai-section-toggle { color: #4a5568; font-size: 10px; transition: transform 0.2s; }
+.ai-section-toggle.open { transform: rotate(180deg); }
+.ai-section-body {
+  padding: 0 16px 16px; font-size: 12.5px; color: #adbac7;
+  line-height: 1.75; border-top: 1px solid rgba(30,42,54,0.8); display: none;
+}
+.ai-section-body.open { display: block; }
+.ai-section-body p { margin-top: 10px; }
+.ai-section-body h4 { font-size: 10px; font-weight: 700; color: #8ACB88; text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 6px; }
+.ai-section-body ul { margin: 6px 0 6px 18px; display: flex; flex-direction: column; gap: 5px; }
+.ai-section-body li { font-size: 12px; color: #adbac7; }
+.ai-section-body strong { color: #e6edf3; font-weight: 600; }
+.ai-tag {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 100px; margin: 2px;
+}
+.tag-active { background: rgba(192,57,43,0.15); color: #f85149; border: 1px solid rgba(192,57,43,0.25); }
+.tag-quiescent { background: rgba(138,203,136,0.15); color: #8ACB88; border: 1px solid rgba(138,203,136,0.25); }
+.tag-uncertain { background: rgba(255,191,70,0.15); color: #FFBF46; border: 1px solid rgba(255,191,70,0.25); }
+.tag-1st { background: rgba(138,203,136,0.15); color: #8ACB88; border: 1px solid rgba(138,203,136,0.25); }
+.tag-2nd { background: rgba(100,131,129,0.15); color: #648381; border: 1px solid rgba(100,131,129,0.25); }
+.tag-consider { background: rgba(255,191,70,0.15); color: #FFBF46; border: 1px solid rgba(255,191,70,0.25); }
+.tag-avoid { background: rgba(192,57,43,0.15); color: #f85149; border: 1px solid rgba(192,57,43,0.25); }
+.tag-orange { background: rgba(255,191,70,0.15); color: #FFBF46; border: 1px solid rgba(255,191,70,0.25); }
+.flag {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.18);
+  border-radius: 6px; padding: 7px 10px; margin: 5px 0;
+  font-size: 11.5px; color: #f85149;
+}
+.tx-card {
+  margin-top: 10px; padding: 11px 13px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+}
+.tx-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.tx-head strong { font-size: 13px; color: #e6edf3; font-weight: 700; }
+.tx-rationale { font-size: 12px; color: #adbac7; line-height: 1.65; }
+.tx-considerations { font-size: 11px; color: #6a7a8a; margin-top: 6px; line-height: 1.6; }
+.ai-disclaimer {
+  background: rgba(255,191,70,0.06); border-top: 1px solid rgba(255,191,70,0.15);
+  padding: 9px 16px; font-size: 10px; font-weight: 500;
+  color: rgba(255,191,70,0.55); line-height: 1.6; letter-spacing: 0.02em;
+}
+.db-bar {
+  background: #161d27; border-bottom: 1px solid #2a3441;
+  padding: 8px 16px; display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500;
+}
+.db-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.db-dot.pending { background: var(--gold); animation: pulse 1.5s infinite; }
+.db-dot.error { background: #f85149; }
+#db-status-text { color: #6a7a8a; }
+
+.submit-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <a href="index.html" class="header-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    MDT Hub
+  </a>
+  <div class="header-title">IBD MDT Case Submission</div>
+  <span class="header-badge">JHH</span>
+</header>
+
+<div class="page-wrap">
+<div class="form-card">
+
+  <!-- FORM HEADER -->
+  <div class="form-head">
+    <div class="form-head-inner">
+      <h1>IBD Multidisciplinary Team</h1>
+      <p>Inflammatory Bowel Disease Case Submission — John Hunter Hospital</p>
+      <div class="form-head-meta">
+        <span class="meta-pill">Hunter New England Health</span>
+        <span class="meta-pill">Gastroenterology &amp; Hepatology</span>
+        <span class="meta-pill">AI Assisted</span>
+      </div>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress" style="width:11%"></div></div>
+
+  <!-- STEP NAV -->
+  <div class="step-nav" id="step-nav">
+    <div class="step-tab active" data-step="1"><span class="step-num">1</span>Referral</div>
+    <div class="step-tab" data-step="2"><span class="step-num">2</span>Patient</div>
+    <div class="step-tab" data-step="3"><span class="step-num">3</span>Phenotype</div>
+    <div class="step-tab" data-step="4"><span class="step-num">4</span>Comorbidities</div>
+    <div class="step-tab" data-step="5"><span class="step-num">5</span>Treatment</div>
+    <div class="step-tab" data-step="6"><span class="step-num">6</span>Clinical</div>
+    <div class="step-tab" data-step="7"><span class="step-num">7</span>Investigations</div>
+    <div class="step-tab" data-step="8"><span class="step-num">8</span>Bloods</div>
+    <div class="step-tab" data-step="9"><span class="step-num">9</span>Imaging</div>
+  </div>
+
+  <div class="form-body">
+
+    <!-- ══ STEP 1 ══ -->
+    <div id="step-1">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 9a5.25 5.25 0 01-4.5-2.55C3.52 8.81 6.1 8 8 8s4.48.81 4.5 2.45A5.25 5.25 0 018 13z" fill="#648381"/>
+          </svg>
+        </div>
+        <span class="sec-title">Referral Details</span>
+      </div>
+
+      <div class="field">
+        <div class="label">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="2" stroke="#648381" stroke-width="1.3"/><path d="M1 5.5l6 4 6-4" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Submitter email <span class="req">*</span>
+        </div>
+        <input type="email" id="submitter-email" placeholder="your.email@health.nsw.gov.au">
+        <div class="err-msg" id="err-submitter-email">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#c0392b" stroke-width="1.2"/><path d="M6 3.5v3M6 8.5v.5" stroke="#c0392b" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Please enter your email address
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 4h4l-3 2.5 1 4L7 9 3.5 11.5l1-4L1.5 5h4z" stroke="#648381" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          Triage category <span class="req">*</span>
+        </div>
+        <div class="radio-group">
+          <div class="radio-opt">
+            <input type="radio" name="triage" id="t1" value="1 — Urgent (for next meeting)">
+            <label for="t1">
+              <span class="radio-dot"><span class="radio-dot-inner"></span></span>
+              <svg class="radio-icon" width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 3.5v3M6.5 9v.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span>1 — Urgent <span style="color:var(--text-muted);font-weight:400">(for next meeting)</span></span>
+            </label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="triage" id="t2" value="2 — Semi-urgent (next available)">
+            <label for="t2"><span class="radio-dot"><span class="radio-dot-inner"></span></span>2 — Semi-urgent <span style="color:var(--text-muted);font-weight:400">(next available)</span></label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="triage" id="t3" value="3 — Non-urgent (when time permits)">
+            <label for="t3"><span class="radio-dot"><span class="radio-dot-inner"></span></span>3 — Non-urgent <span style="color:var(--text-muted);font-weight:400">(when time permits)</span></label>
+          </div>
+          <div class="radio-opt">
+            <input type="radio" name="triage" id="t4" value="4 — Education / interest">
+            <label for="t4"><span class="radio-dot"><span class="radio-dot-inner"></span></span>4 — Education / interest</label>
+          </div>
+        </div>
+        <div class="err-msg" id="err-triage">Please select a triage category</div>
+      </div>
+
+      <div class="field">
+        <div class="label">Reason for MDT review <span class="req">*</span></div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="mdt-reason" id="r1" value="Treatment / management options"><label for="r1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Treatment / management</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="mdt-reason" id="r2" value="Diagnostic issues"><label for="r2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Diagnostic issues</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="mdt-reason" id="r3" value="Interest / education"><label for="r3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Interest / education</label></div>
+        </div>
+        <div class="err-msg" id="err-mdt-reason">Please select at least one reason</div>
+      </div>
+
+      <div class="field">
+        <div class="label">Further details</div>
+        <textarea id="mdt-details" placeholder="Additional context for MDT review"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="label">Location <span class="req">*</span></div>
+        <div class="radio-group">
+          <div class="radio-opt"><input type="radio" name="location" id="loc1" value="Public outpatients"><label for="loc1"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Public outpatients</label></div>
+          <div class="radio-opt"><input type="radio" name="location" id="loc2" value="Private consulting rooms"><label for="loc2"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Private consulting rooms</label></div>
+          <div class="radio-opt"><input type="radio" name="location" id="loc3" value="Current inpatient"><label for="loc3"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Current inpatient</label></div>
+        </div>
+        <div class="err-msg" id="err-location">Please select a location</div>
+      </div>
+
+      <div class="field">
+        <div class="label">Referral type <span class="req">*</span></div>
+        <div class="toggle-group">
+          <div class="toggle-opt yes"><input type="radio" name="referral-type" id="rt1" value="Initial referral"><label for="rt1">Initial referral</label></div>
+          <div class="toggle-opt"><input type="radio" name="referral-type" id="rt2" value="Follow-up"><label for="rt2">Follow-up</label></div>
+        </div>
+        <div class="err-msg" id="err-referral-type">Please select referral type</div>
+      </div>
+
+      <div class="field">
+        <div class="label">Referring clinician <span class="req">*</span></div>
+        <select id="referring-clinician" style="max-width:340px;">
+          <option value="">Select clinician</option>
+          <option>Daniel Oliver</option><option>Georgia Edwards</option><option>Kate Napthali</option>
+          <option>Robert Gibson</option><option>Michael Potter</option><option>Robert Foster</option>
+          <option>Steven Bollipo</option><option>Stephen Philcox</option><option>Joshua McCarthy</option>
+          <option>James Lavender</option><option>Thomas Goodsall</option><option>Alkesh Zala</option>
+          <option>Dane Cook</option><option>Savannah Morrison</option><option>Nicholas Talley</option>
+          <option>Lay Gan</option><option>Melissa Carroll</option><option>Other</option>
+        </select>
+        <div class="err-msg" id="err-clinician">Please select a referring clinician</div>
+      </div>
+
+      <div class="field">
+        <div class="label">Referring clinician email</div>
+        <input type="email" id="clinician-email" placeholder="clinician@email.com" style="max-width:320px;">
+      </div>
+    </div>
+
+    <!-- ══ STEP 2 ══ -->
+    <div id="step-2" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" stroke="#648381" stroke-width="1.3"/><path d="M5 8h6M5 5.5h3M5 10.5h5" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sec-title">Patient Details</span>
+      </div>
+      <div class="field">
+        <div class="label">Patient name <span class="req">*</span></div>
+        <input type="text" id="patient-name" placeholder="First and last name" style="max-width:340px;">
+        <div class="err-msg" id="err-patient-name">Please enter patient name</div>
+      </div>
+      <div class="field-row">
+        <div>
+          <div class="label">Date of birth <span class="req">*</span></div>
+          <input type="date" id="dob">
+          <div class="err-msg" id="err-dob">Please enter date of birth</div>
+        </div>
+        <div>
+          <div class="label">Gender <span class="req">*</span></div>
+          <div class="radio-group">
+            <div class="radio-opt"><input type="radio" name="gender" id="g1" value="Male"><label for="g1"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Male</label></div>
+            <div class="radio-opt"><input type="radio" name="gender" id="g2" value="Female"><label for="g2"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Female</label></div>
+            <div class="radio-opt"><input type="radio" name="gender" id="g3" value="Other / prefer not to say"><label for="g3"><span class="radio-dot"><span class="radio-dot-inner"></span></span>Other / prefer not to say</label></div>
+          </div>
+          <div class="err-msg" id="err-gender">Please select gender</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">MRN</div>
+        <div class="hint">Medical record number — if known</div>
+        <input type="text" id="mrn" placeholder="MRN" style="max-width:220px;">
+      </div>
+    </div>
+
+    <!-- ══ STEP 3 ══ -->
+    <div id="step-3" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#648381" stroke-width="1.3"/><path d="M8 5v3.5l2.5 1.5" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sec-title">IBD Phenotype</span>
+      </div>
+      <div class="field">
+        <div class="label">Montreal classification <span class="req">*</span></div>
+        <select id="montreal" style="max-width:440px;">
+          <option value="">Select classification</option>
+          <optgroup label="Crohn's disease — Age at diagnosis">
+            <option>CD — A1 (&lt;16 years)</option><option>CD — A2 (17–40 years)</option><option>CD — A3 (&gt;40 years)</option>
+          </optgroup>
+          <optgroup label="Crohn's disease — Location">
+            <option>CD — L1 (ileal)</option><option>CD — L2 (colonic)</option><option>CD — L3 (ileocolonic)</option><option>CD — L4 (upper GI modifier)</option>
+          </optgroup>
+          <optgroup label="Crohn's disease — Behaviour">
+            <option>CD — B1 (non-stricturing, non-penetrating)</option><option>CD — B2 (stricturing)</option><option>CD — B3 (penetrating)</option><option>CD — B3p (perianal modifier)</option>
+          </optgroup>
+          <optgroup label="Ulcerative colitis — Extent">
+            <option>UC — E1 (proctitis)</option><option>UC — E2 (left-sided)</option><option>UC — E3 (extensive / pancolitis)</option>
+          </optgroup>
+          <optgroup label="Ulcerative colitis — Severity">
+            <option>UC — S0 (clinical remission)</option><option>UC — S1 (mild)</option><option>UC — S2 (moderate)</option><option>UC — S3 (severe)</option>
+          </optgroup>
+        </select>
+        <div class="err-msg" id="err-montreal">Please select a classification</div>
+      </div>
+      <div class="field">
+        <div class="label">Additional phenotype details</div>
+        <textarea id="phenotype-detail" placeholder="Perianal disease, upper GI involvement, IBD-U, or other nuance"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ STEP 4 ══ -->
+    <div id="step-4" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a3 3 0 100 6 3 3 0 000-6zM3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sec-title">Comorbidities &amp; Status</span>
+      </div>
+      <div class="field">
+        <div class="label">Comorbidities</div>
+        <div class="subgroup">Metabolic / Cardiovascular</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c1" value="Diabetes mellitus (T1/T2)"><label for="c1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Diabetes mellitus</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c2" value="Hypertension"><label for="c2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Hypertension</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c3" value="Hyperlipidaemia"><label for="c3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Hyperlipidaemia</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c4" value="Obesity"><label for="c4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Obesity</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c5" value="Chronic kidney disease"><label for="c5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>CKD</label></div>
+        </div>
+        <div class="subgroup">Rheumatological</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c6" value="Rheumatoid arthritis"><label for="c6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Rheumatoid arthritis</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c7" value="Psoriasis / psoriatic arthritis"><label for="c7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Psoriasis / PsA</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c8" value="Axial spondyloarthropathy"><label for="c8"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Axial spondyloarthropathy</label></div>
+        </div>
+        <div class="subgroup">Hepatobiliary</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c9" value="PSC"><label for="c9"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PSC</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c10" value="NAFLD / MASLD"><label for="c10"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>NAFLD / MASLD</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c11" value="Chronic liver disease (other)"><label for="c11"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Other CLD</label></div>
+        </div>
+        <div class="subgroup">Haematological / Oncological</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c12" value="VTE — prior history"><label for="c12"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>VTE (prior)</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c13" value="Malignancy (current or prior)"><label for="c13"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Malignancy</label></div>
+        </div>
+        <div class="subgroup">Mental Health / Other</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c14" value="Depression / anxiety"><label for="c14"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Depression / anxiety</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c15" value="Osteoporosis / osteopenia"><label for="c15"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Osteoporosis</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c16" value="Chronic lung disease"><label for="c16"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Chronic lung disease</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c17" value="Immunodeficiency / transplant"><label for="c17"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Immunodeficiency</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="comorbid" id="c18" value="None"><label for="c18"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>None</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">Other comorbidities</div>
+        <textarea id="comorbid-other" placeholder="Any additional conditions not listed above"></textarea>
+      </div>
+      <div class="field-row">
+        <div>
+          <div class="label">BMI</div>
+          <input type="number" id="bmi" placeholder="kg/m²" step="0.1">
+        </div>
+        <div>
+          <div class="label">ECOG performance status</div>
+          <select id="ecog">
+            <option value="">Select</option>
+            <option>0 — Fully active</option>
+            <option>1 — Restricted strenuous activity</option>
+            <option>2 — Self-care only, up &gt;50% waking hours</option>
+            <option>3 — Limited self-care, bed/chair &gt;50%</option>
+            <option>4 — Completely disabled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 5 ══ -->
+    <div id="step-5" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.8 2 4 3.8 4 6c0 1.5.8 2.8 2 3.5V11H4.5A1.5 1.5 0 003 12.5v2A1.5 1.5 0 004.5 16h7a1.5 1.5 0 001.5-1.5v-2A1.5 1.5 0 0011.5 11H10V9.5C11.2 8.8 12 7.5 12 6c0-2.2-1.8-4-4-4z" fill="#648381"/></svg>
+        </div>
+        <span class="sec-title">Treatment History</span>
+      </div>
+
+      <div class="field">
+        <div class="label">Current treatment <span class="req">*</span></div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx1" value="Mesalazine / 5-ASA"><label for="tx1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Mesalazine / 5-ASA</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx2" value="Azathioprine / 6-MP"><label for="tx2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Azathioprine / 6-MP</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx3" value="Methotrexate"><label for="tx3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Methotrexate</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx4" value="Prednisolone / steroids"><label for="tx4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Prednisolone</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx5" value="Budesonide"><label for="tx5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Budesonide</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx6" value="Infliximab"><label for="tx6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Infliximab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx7" value="Adalimumab"><label for="tx7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Adalimumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx8" value="Vedolizumab"><label for="tx8"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Vedolizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx9" value="Ustekinumab"><label for="tx9"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ustekinumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx10" value="Risankizumab"><label for="tx10"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Risankizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx11" value="Ozanimod"><label for="tx11"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ozanimod</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx12" value="Tofacitinib"><label for="tx12"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Tofacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx13" value="Upadacitinib"><label for="tx13"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Upadacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="current-tx" id="tx0" value="None"><label for="tx0"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>None</label></div>
+        </div>
+        <div class="err-msg" id="err-current-tx">Please select current treatment (or None)</div>
+        <div style="margin-top:12px;"><textarea id="current-tx-notes" placeholder="Doses, duration, response"></textarea></div>
+      </div>
+
+      <div class="field">
+        <div class="label">Past treatment</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt1" value="Mesalazine / 5-ASA"><label for="pt1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Mesalazine / 5-ASA</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt2" value="Azathioprine / 6-MP"><label for="pt2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Azathioprine / 6-MP</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt3" value="Methotrexate"><label for="pt3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Methotrexate</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt4" value="Prednisolone / steroids"><label for="pt4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Prednisolone</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt5" value="Budesonide"><label for="pt5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Budesonide</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt6" value="Infliximab"><label for="pt6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Infliximab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt7" value="Adalimumab"><label for="pt7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Adalimumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt8" value="Vedolizumab"><label for="pt8"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Vedolizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt9" value="Ustekinumab"><label for="pt9"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ustekinumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt10" value="Risankizumab"><label for="pt10"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Risankizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt11" value="Ozanimod"><label for="pt11"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ozanimod</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt12" value="Tofacitinib"><label for="pt12"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Tofacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt13" value="Upadacitinib"><label for="pt13"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Upadacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="past-tx" id="pt0" value="None"><label for="pt0"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>None</label></div>
+        </div>
+        <div style="margin-top:12px;"><textarea id="past-tx-notes" placeholder="Doses, duration, reason for cessation"></textarea></div>
+      </div>
+
+      <div class="field">
+        <div class="label">Past biologic therapy</div>
+        <div class="hint">Select all that apply — cessation reason appears below each agent</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b1" data-bio="Infliximab" value="Infliximab"><label for="b1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Infliximab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b2" data-bio="Adalimumab" value="Adalimumab"><label for="b2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Adalimumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b3" data-bio="Vedolizumab" value="Vedolizumab"><label for="b3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Vedolizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b4" data-bio="Ustekinumab" value="Ustekinumab"><label for="b4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ustekinumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b5" data-bio="Risankizumab" value="Risankizumab"><label for="b5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Risankizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b6" data-bio="Tofacitinib" value="Tofacitinib"><label for="b6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Tofacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b7" data-bio="Upadacitinib" value="Upadacitinib"><label for="b7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Upadacitinib</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b8" data-bio="Certolizumab" value="Certolizumab"><label for="b8"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Certolizumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b9" data-bio="Golimumab" value="Golimumab"><label for="b9"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Golimumab</label></div>
+          <div class="pill-toggle"><input type="checkbox" class="bio-ck" id="b10" data-bio="Other" value="Other"><label for="b10"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Other</label></div>
+        </div>
+        <div id="cessation-blocks"></div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 6 ══ -->
+    <div id="step-6" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a3 3 0 100 6 3 3 0 000-6zM3.5 14c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/><path d="M11 9l2 2-2 2" stroke="#648381" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="sec-title">Clinical Features</span>
+      </div>
+      <div class="field">
+        <div class="label">Prior IBD-related surgery?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt no"><input type="radio" name="surgery" id="s0" value="No prior surgery"><label for="s0">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            No</label></div>
+          <div class="toggle-opt yes"><input type="radio" name="surgery" id="s1" value="Yes — IBD-related surgery"><label for="s1">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Yes</label></div>
+        </div>
+        <div id="surgery-detail" class="sub-panel hidden">
+          <div class="label">Surgical details</div>
+          <textarea id="surgery-notes" placeholder="Type of surgery, date, outcome"></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">Extra-intestinal manifestations (EIM)</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e1" value="Arthropathy"><label for="e1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Arthropathy</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e2" value="Ankylosing spondylitis / axSpA"><label for="e2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>axSpA / AS</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e3" value="Erythema nodosum"><label for="e3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Erythema nodosum</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e4" value="Pyoderma gangrenosum"><label for="e4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Pyoderma gangrenosum</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e5" value="Uveitis / episcleritis"><label for="e5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Uveitis / episcleritis</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e6" value="PSC"><label for="e6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PSC</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e7" value="Aphthous ulcers"><label for="e7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Aphthous ulcers</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e8" value="Other"><label for="e8"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Other</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="eim" id="e0" value="None"><label for="e0"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>None</label></div>
+        </div>
+        <div style="margin-top:12px;"><textarea id="eim-notes" placeholder="Additional notes on EIM"></textarea></div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 7 ══ -->
+    <div id="step-7" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#648381" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="#648381"/><path d="M8 3v1M8 12v1M3 8h1M12 8h1" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sec-title">Investigations</span>
+      </div>
+      <div class="field">
+        <div class="label">Endoscopy findings</div>
+        <textarea id="endo-findings" placeholder="Findings, procedure date, Mayo / SES-CD scores if available"></textarea>
+      </div>
+      <div class="field">
+        <div class="label">Endoscopic images for review?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt no"><input type="radio" name="endo-images" id="ei0" value="No"><label for="ei0">No</label></div>
+          <div class="toggle-opt yes"><input type="radio" name="endo-images" id="ei1" value="Yes"><label for="ei1">Yes</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">Histology findings</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h1" value="Active chronic inflammation"><label for="h1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Active chronic inflammation</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h2" value="Cryptitis / crypt abscesses"><label for="h2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cryptitis / abscesses</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h3" value="Architectural distortion"><label for="h3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Architectural distortion</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h4" value="Granulomata"><label for="h4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Granulomata</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h5" value="Dysplasia"><label for="h5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Dysplasia</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h6" value="No significant abnormality"><label for="h6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>NSA</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="histo" id="h7" value="Other"><label for="h7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Other</label></div>
+        </div>
+        <div style="margin-top:12px;"><textarea id="histo-notes" placeholder="Biopsy sites, report date, key findings"></textarea></div>
+      </div>
+      <div class="field">
+        <div class="label">Intestinal ultrasound (IUS) performed?</div>
+        <div class="toggle-group">
+          <div class="toggle-opt no"><input type="radio" name="ius-done" id="iu0" value="No"><label for="iu0">No</label></div>
+          <div class="toggle-opt yes"><input type="radio" name="ius-done" id="iu1" value="Yes"><label for="iu1">Yes</label></div>
+        </div>
+      </div>
+      <div id="ius-detail" class="hidden">
+        <div class="field">
+          <div class="label">IUS findings</div>
+          <div class="subgroup">Disease activity</div>
+          <div class="pill-group">
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a1" value="Bowel wall thickening (BWT ≥3mm)"><label for="iu-a1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>BWT ≥3mm</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a2" value="Loss of wall stratification"><label for="iu-a2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Loss of stratification</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a3" value="Increased Doppler signal (mild)"><label for="iu-a3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Doppler (mild)</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a4" value="Increased Doppler signal (moderate–marked)"><label for="iu-a4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Doppler (mod–marked)</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a5" value="Fat wrapping / creeping mesentery"><label for="iu-a5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Fat wrapping</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-a6" value="Mesenteric lymphadenopathy"><label for="iu-a6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Lymphadenopathy</label></div>
+          </div>
+          <div class="subgroup">Complications</div>
+          <div class="pill-group">
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-c1" value="Stricture"><label for="iu-c1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Stricture</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-c2" value="Prestenotic dilatation"><label for="iu-c2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Prestenotic dilatation</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-c3" value="Fistula / sinus tract"><label for="iu-c3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Fistula / sinus tract</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-c4" value="Abscess / collection"><label for="iu-c4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Abscess / collection</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-c5" value="Free fluid"><label for="iu-c5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Free fluid</label></div>
+          </div>
+          <div class="subgroup">Segment involvement</div>
+          <div class="pill-group">
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s1" value="Terminal ileum"><label for="iu-s1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Terminal ileum</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s2" value="Neo-terminal ileum / anastomosis"><label for="iu-s2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Neo-TI / anastomosis</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s3" value="Jejunum"><label for="iu-s3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Jejunum</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s4" value="Right colon"><label for="iu-s4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Right colon</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s5" value="Transverse colon"><label for="iu-s5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Transverse colon</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s6" value="Left colon / sigmoid"><label for="iu-s6"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Left colon / sigmoid</label></div>
+            <div class="pill-toggle"><input type="checkbox" name="ius" id="iu-s7" value="Rectum"><label for="iu-s7"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Rectum</label></div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="label">BWT — thickest segment (mm)</div>
+          <input type="number" id="ius-bwt" step="0.1" placeholder="e.g. 5.2" style="max-width:160px;">
+        </div>
+        <div class="field">
+          <div class="label">IUS report / free text</div>
+          <textarea id="ius-notes" placeholder="Segment(s), Doppler grade, USGIAS / IBUS-SAS score, comparison to prior"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 8 ══ -->
+    <div id="step-8" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v3M8 11v3M2 8h3M11 8h3" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="8" r="3" stroke="#648381" stroke-width="1.3"/></svg>
+        </div>
+        <span class="sec-title">Blood Tests</span>
+      </div>
+      <div class="field">
+        <div class="label">Most recent results</div>
+        <div class="blood-grid">
+          <div class="blood-item"><label>Albumin (g/L)</label><input type="number" id="b-albumin" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>CRP (mg/L)</label><input type="number" id="b-crp" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>WCC (×10⁹/L)</label><input type="number" id="b-wcc" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>Hb (g/L)</label><input type="number" id="b-hb" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>Platelets (×10⁹/L)</label><input type="number" id="b-plt" placeholder="—"></div>
+          <div class="blood-item"><label>FCalp (µg/g)</label><input type="number" id="b-fcal" placeholder="—"></div>
+          <div class="blood-item"><label>ALT (U/L)</label><input type="number" id="b-alt" placeholder="—"></div>
+          <div class="blood-item"><label>AST (U/L)</label><input type="number" id="b-ast" placeholder="—"></div>
+          <div class="blood-item"><label>ALP (U/L)</label><input type="number" id="b-alp" placeholder="—"></div>
+          <div class="blood-item"><label>GGT (U/L)</label><input type="number" id="b-ggt" placeholder="—"></div>
+          <div class="blood-item"><label>Bilirubin (µmol/L)</label><input type="number" id="b-bili" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>Urea (mmol/L)</label><input type="number" id="b-urea" step="0.1" placeholder="—"></div>
+          <div class="blood-item"><label>Creatinine (µmol/L)</label><input type="number" id="b-cr" placeholder="—"></div>
+          <div class="blood-item"><label>eGFR (mL/min/1.73m²)</label><input type="number" id="b-egfr" placeholder="—"></div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="hint">Other relevant results (drug levels, TPMT, serology, etc.)</div>
+          <textarea id="b-other" style="min-height:52px;"></textarea>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="hint">Date of bloods</div>
+          <input type="date" id="b-date" style="max-width:200px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STEP 9 ══ -->
+    <div id="step-9" class="hidden">
+      <div class="sec-header">
+        <div class="sec-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#648381" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="#648381" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <span class="sec-title">Imaging</span>
+      </div>
+      <div class="field">
+        <div class="label">Imaging modalities</div>
+        <div class="pill-group">
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im1" value="MRI"><label for="im1"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>MRI</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im2" value="CT"><label for="im2"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>CT</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im3" value="Ultrasound"><label for="im3"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Ultrasound</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im4" value="PET"><label for="im4"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PET</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im5" value="Plain X-ray"><label for="im5"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Plain X-ray</label></div>
+          <div class="pill-toggle"><input type="checkbox" name="imaging-mod" id="im0" value="No imaging"><label for="im0"><svg class="pill-check" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No imaging</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">Imaging provider</div>
+        <select id="imaging-provider" style="max-width:280px;">
+          <option value="">Select provider</option>
+          <option>HIG</option><option>PACS</option><option>Alto</option><option>Clarity</option>
+          <option>PRP</option><option>InFocus</option><option>Lumus</option><option>GXU</option>
+          <option value="Other">Other</option>
+        </select>
+        <div id="imaging-other-wrap" class="hidden" style="margin-top:10px;">
+          <input type="text" id="imaging-other" placeholder="Please specify" style="max-width:280px;">
+        </div>
+        <div class="notice">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#648381" stroke-width="1.2"/><path d="M7 4.5v3.5M7 9.5v.5" stroke="#648381" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Private hospital reports: forward to <strong>Katie.Wilson2@health.nsw.gov.au</strong> before the meeting.
+        </div>
+      </div>
+      <div class="field">
+        <div class="label">Imaging report / findings</div>
+        <textarea id="imaging-report" placeholder="Paste report or summarise key findings"></textarea>
+      </div>
+    </div>
+
+    <!-- ══ SUCCESS ══ -->
+    <div id="step-success" class="hidden">
+      <div class="success-wrap">
+        <div class="success-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8ACB88" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>Case submitted</h2>
+        <p class="sub-text">Saved to the IBD MDT database. AI clinical analysis is generating below — review and copy to your MDT documentation.</p>
+
+        <!-- DB status -->
+        <div class="ai-panel" style="margin-bottom:0.75rem;">
+          <div class="db-bar">
+            <div class="db-dot pending" id="db-dot"></div>
+            <span id="db-status-text">Saving to database…</span>
+          </div>
+        </div>
+
+        <!-- AI Panel -->
+        <div class="ai-panel">
+          <div class="ai-panel-header">
+            <div class="ai-panel-title">
+              <div class="ai-badge"><div class="ai-badge-dot"></div>Claude AI</div>
+              <h3>Clinical Analysis &amp; MDT Preparation</h3>
+            </div>
+            <button class="ai-copy-btn" id="ai-copy-btn" onclick="copyAiAnalysis()">Copy</button>
+          </div>
+          <div id="ai-loading" class="ai-loading">
+            <div class="ai-spinner"></div>
+            <div class="ai-loading-steps">
+              <div class="ai-loading-step" id="load-1">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+                Reading clinical data
+              </div>
+              <div class="ai-loading-step" id="load-2">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+                Synthesising disease activity
+              </div>
+              <div class="ai-loading-step" id="load-3">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+                Reviewing treatment history
+              </div>
+              <div class="ai-loading-step" id="load-4">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+                Generating recommendations
+              </div>
+            </div>
+          </div>
+          <div id="ai-error" class="ai-error hidden">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="#f85149" stroke-width="1.5"/><path d="M14 8v7M14 18v1" stroke="#f85149" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <div class="ai-error-msg" id="ai-error-msg">Analysis failed.</div>
+            <button class="ai-retry-btn" onclick="runAiAnalysis()">Retry</button>
+          </div>
+          <div id="ai-results" class="hidden"></div>
+          <div class="ai-disclaimer">AI-GENERATED · For MDT preparation only · Clinical decisions remain with the treating team · Verify PBS criteria and contraindications independently</div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-card">
+          <div class="summary-head">
+            <span>Structured case summary</span>
+            <button class="copy-btn" id="copy-btn" onclick="copySummary()">Copy</button>
+          </div>
+          <div class="summary-body" id="summary-body"></div>
+        </div>
+
+        <div class="submit-actions">
+          <button class="btn" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="4" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 4V2.5A.5.5 0 014.5 2h5a.5.5 0 01.5.5V4M4 9h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Print
+          </button>
+          <button class="btn btn-primary" onclick="resetForm()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7a5 5 0 015-5 5 5 0 014.5 2.8M12 7a5 5 0 01-5 5 5 5 0 01-4.5-2.8" stroke="white" stroke-width="1.3" stroke-linecap="round"/><path d="M11.5 2.5v3h-3" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Submit another case
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM NAV -->
+  <div class="form-nav" id="form-nav">
+    <button class="btn" id="btn-back" onclick="navigate(-1)" disabled>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 3L4 7l5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back
+    </button>
+    <span class="step-info" id="step-info">Step 1 of 9</span>
+    <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">
+      Next
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l5 4-5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 9;
+let savedCaseId = null;
+let loadingTimer = null;
+
+function getChecked(name) { return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(i => i.value); }
+function getRadio(name) { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; }
+function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function formatDate(d) { if (!d) return ''; const p = d.split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function showStep(n) {
+  for (let i = 1; i <= totalSteps; i++) document.getElementById(`step-${i}`).classList.add('hidden');
+  document.getElementById('step-success').classList.add('hidden');
+  document.querySelectorAll('.step-tab').forEach(t => {
+    const s = parseInt(t.dataset.step);
+    t.classList.remove('active','done');
+    if (s === n) t.classList.add('active');
+    else if (s < n) t.classList.add('done');
+  });
+  if (n > totalSteps) {
+    document.getElementById('step-success').classList.remove('hidden');
+    document.getElementById('form-nav').classList.add('hidden');
+    document.getElementById('step-nav').classList.add('hidden');
+    document.getElementById('progress').style.width = '100%';
+    buildSummary(); submitCase(); return;
+  }
+  document.getElementById(`step-${n}`).classList.remove('hidden');
+  document.getElementById('btn-back').disabled = n === 1;
+  document.getElementById('btn-next').innerHTML = n === totalSteps
+    ? 'Submit <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : 'Next <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l5 4-5 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('step-info').textContent = `Step ${n} of ${totalSteps}`;
+  document.getElementById('progress').style.width = Math.round((n / (totalSteps + 1)) * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function clearErrors() {
+  document.querySelectorAll('.err-msg').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.err').forEach(e => e.classList.remove('err'));
+}
+function showErr(inputId, msgId) {
+  const inp = document.getElementById(inputId);
+  if (inp) inp.classList.add('err');
+  const msg = document.getElementById(msgId);
+  if (msg) msg.classList.add('show');
+}
+
+function validate(step) {
+  clearErrors(); let ok = true;
+  function fail(inputId, msgId) { showErr(inputId, msgId); ok = false; }
+  if (step === 1) {
+    const email = document.getElementById('submitter-email');
+    if (!email.value || !email.value.includes('@')) { email.classList.add('err'); document.getElementById('err-submitter-email').classList.add('show'); ok = false; }
+    if (!getRadio('triage')) { document.getElementById('err-triage').classList.add('show'); ok = false; }
+    if (!getChecked('mdt-reason').length) { document.getElementById('err-mdt-reason').classList.add('show'); ok = false; }
+    if (!getRadio('location')) { document.getElementById('err-location').classList.add('show'); ok = false; }
+    if (!getRadio('referral-type')) { document.getElementById('err-referral-type').classList.add('show'); ok = false; }
+    if (!val('referring-clinician')) fail('referring-clinician','err-clinician');
+  }
+  if (step === 2) {
+    if (!val('patient-name')) fail('patient-name','err-patient-name');
+    if (!val('dob')) fail('dob','err-dob');
+    if (!getRadio('gender')) { document.getElementById('err-gender').classList.add('show'); ok = false; }
+  }
+  if (step === 3) { if (!val('montreal')) fail('montreal','err-montreal'); }
+  if (step === 5) { if (!getChecked('current-tx').length) { document.getElementById('err-current-tx').classList.add('show'); ok = false; } }
+  return ok;
+}
+
+function navigate(dir) {
+  if (dir === 1 && !validate(currentStep)) return;
+  currentStep += dir;
+  showStep(currentStep);
+}
+
+// Clickable tabs
+document.querySelectorAll('.step-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const target = parseInt(this.dataset.step);
+    if (target <= currentStep) { currentStep = target; showStep(currentStep); }
+  });
+});
+
+// Conditional reveals
+document.querySelectorAll('input[name="ius-done"]').forEach(r => r.addEventListener('change', function() {
+  document.getElementById('ius-detail').classList.toggle('hidden', this.value !== 'Yes');
+}));
+document.querySelectorAll('input[name="surgery"]').forEach(r => r.addEventListener('change', function() {
+  document.getElementById('surgery-detail').classList.toggle('hidden', this.value !== 'Yes — IBD-related surgery');
+}));
+document.getElementById('imaging-provider').addEventListener('change', function() {
+  document.getElementById('imaging-other-wrap').classList.toggle('hidden', this.value !== 'Other');
+});
+
+// Biologic cessation blocks
+const cessationOpts = ['Primary non-response','Secondary loss of response','Adverse effect / intolerance','Remission — elective cessation','Patient preference','Unknown reason','Other'];
+document.querySelectorAll('.bio-ck').forEach(cb => {
+  cb.addEventListener('change', function() {
+    const bio = this.dataset.bio;
+    const bid = 'cess-' + bio.replace(/\s+/g,'');
+    if (this.checked) {
+      const d = document.createElement('div');
+      d.className = 'cessation-block'; d.id = bid;
+      d.innerHTML = `<div class="label" style="margin-bottom:10px;font-size:12px;">Cessation reason — ${bio}</div>
+        <div class="toggle-group" style="flex-wrap:wrap;gap:6px;">
+          ${cessationOpts.map(r => `<div class="toggle-opt"><input type="radio" name="cess-${bio}" id="cess-${bio}-${r.replace(/\s/g,'-')}" value="${r}"><label for="cess-${bio}-${r.replace(/\s/g,'-')}" style="font-size:11px;padding:6px 12px;">${r}</label></div>`).join('')}
+        </div>
+        <div style="margin-top:10px;"><textarea placeholder="Additional detail (optional)" style="min-height:44px;width:100%;"></textarea></div>`;
+      document.getElementById('cessation-blocks').appendChild(d);
+    } else { document.getElementById(bid)?.remove(); }
+  });
+});
+
+// Data collection
+function collectData() {
+  const bioChecked = Array.from(document.querySelectorAll('.bio-ck:checked')).map(c => c.value);
+  const cessDetails = bioChecked.map(bio => { const r = getRadio('cess-' + bio); return bio + (r ? ': ' + r : ': not specified'); });
+  const provider = val('imaging-provider') === 'Other' ? (val('imaging-other') || 'Other') : val('imaging-provider');
+  return {
+    submitter_email: val('submitter-email'), triage: getRadio('triage'),
+    mdt_reason: getChecked('mdt-reason').join('; '), mdt_details: val('mdt-details'),
+    location: getRadio('location'), referral_type: getRadio('referral-type'),
+    referring_clinician: val('referring-clinician'), clinician_email: val('clinician-email'),
+    patient_name: val('patient-name'), dob: formatDate(val('dob')), gender: getRadio('gender'), mrn: val('mrn'),
+    montreal: val('montreal'), phenotype_detail: val('phenotype-detail'),
+    comorbidities: getChecked('comorbid').join('; '), comorbid_other: val('comorbid-other'),
+    bmi: val('bmi'), ecog: val('ecog'),
+    current_tx: getChecked('current-tx').join('; '), current_tx_notes: val('current-tx-notes'),
+    past_tx: getChecked('past-tx').join('; '), past_tx_notes: val('past-tx-notes'),
+    past_biologics: bioChecked.join('; '), biologic_cessation: cessDetails.join(' | '),
+    surgery: getRadio('surgery'), surgery_notes: val('surgery-notes'),
+    eim: getChecked('eim').join('; '), eim_notes: val('eim-notes'),
+    endo_findings: val('endo-findings'), endo_images: getRadio('endo-images'),
+    histology: getChecked('histo').join('; '), histo_notes: val('histo-notes'),
+    ius_done: getRadio('ius-done'), ius_findings: getChecked('ius').join('; '),
+    ius_bwt: val('ius-bwt'), ius_notes: val('ius-notes'),
+    albumin: val('b-albumin'), crp: val('b-crp'), wcc: val('b-wcc'), hb: val('b-hb'),
+    platelets: val('b-plt'), fcal: val('b-fcal'), alt: val('b-alt'), ast: val('b-ast'),
+    alp: val('b-alp'), ggt: val('b-ggt'), bilirubin: val('b-bili'), urea: val('b-urea'),
+    creatinine: val('b-cr'), egfr: val('b-egfr'), other_bloods: val('b-other'),
+    bloods_date: formatDate(val('b-date')),
+    imaging_modalities: getChecked('imaging-mod').join('; '),
+    imaging_provider: provider, imaging_report: val('imaging-report'),
+  };
+}
+
+// Submit
+async function submitCase() {
+  const data = collectData();
+  setDbStatus('pending','Saving to database…');
+  try {
+    const res = await fetch('/.netlify/functions/submit-ibd-case', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+    const json = await res.json();
+    if (!res.ok || !json.success) throw new Error(json.error || 'Unknown error');
+    savedCaseId = json.id;
+    setDbStatus('ok', `Saved · ${savedCaseId.slice(0,8)}…`);
+  } catch(err) {
+    setDbStatus('error','Database save failed — ' + err.message);
+  }
+  runAiAnalysis();
+}
+
+function setDbStatus(state, text) {
+  const dot = document.getElementById('db-dot');
+  const txt = document.getElementById('db-status-text');
+  dot.className = 'db-dot' + (state==='error' ? ' error' : state==='ok' ? '' : ' pending');
+  txt.style.color = state==='error' ? '#f85149' : state==='ok' ? '#8ACB88' : '#6a7a8a';
+  txt.textContent = text;
+}
+
+// AI Analysis
+let loadStep = 0;
+function animateLoading() {
+  loadStep = 0;
+  const stepEls = ['load-1','load-2','load-3','load-4'];
+  stepEls.forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    el.querySelector('svg').innerHTML = '<circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>';
+  });
+  function tick() {
+    if (loadStep > 0) {
+      const prev = document.getElementById(`load-${loadStep}`);
+      prev.classList.remove('active'); prev.classList.add('done');
+      prev.querySelector('svg').innerHTML = '<path d="M2 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    }
+    loadStep++;
+    if (loadStep <= 4) {
+      document.getElementById(`load-${loadStep}`).classList.add('active');
+      loadingTimer = setTimeout(tick, 900 + Math.random() * 500);
+    }
+  }
+  tick();
+}
+
+function expandAnalysis(a) {
+  return {
+    case_summary: a.s || '',
+    disease_activity: { overall: a.a || '', rationale: a.r || '', red_flags: a.f || [] },
+    risk: { level: a.rl || '', factors: a.rf || [], steroid_dependent: a.sd || false, surgical_risk: a.sr || '' },
+    biologic_positioning: { tried: a.bt || [], available: a.ba || [], rationale: a.br || '' },
+    patient_factors: a.pf || [],
+    treatment_options: (a.t || []).map(x => ({ option: x.o, priority: x.p, considerations: x.c, rationale: x.r || '' })),
+    mdt_discussion_points: a.d || [],
+    missing_information: a.m || []
+  };
+}
+
+async function runAiAnalysis() {
+  document.getElementById('ai-loading').classList.remove('hidden');
+  document.getElementById('ai-error').classList.add('hidden');
+  document.getElementById('ai-results').classList.add('hidden');
+  animateLoading();
+
+  const caseData = collectData();
+
+  // Build prompt
+  const b = caseData.bloods || {};
+  const bp = [];
+  if (b && caseData.albumin) bp.push(`Albumin ${caseData.albumin} g/L`);
+  if (caseData.crp) bp.push(`CRP ${caseData.crp} mg/L`);
+  if (caseData.hb) bp.push(`Hb ${caseData.hb} g/L`);
+  if (caseData.fcal) bp.push(`FCalp ${caseData.fcal} µg/g`);
+  if (caseData.wcc) bp.push(`WCC ${caseData.wcc}`);
+  if (caseData.egfr) bp.push(`eGFR ${caseData.egfr}`);
+  if (caseData.alt) bp.push(`ALT ${caseData.alt}`);
+
+  const prompt = `You are an experienced gastroenterologist preparing a case for IBD MDT at John Hunter Hospital, NSW Australia. Apply PBS/TGA conventions and ECCO guidelines.
+
+=== CASE ===
+${caseData.patient_name||'?'} | DOB: ${caseData.dob||'?'} | ${caseData.gender||'?'}${caseData.mrn ? ' | MRN: ' + caseData.mrn : ''}
+Triage: ${caseData.triage||'?'} | Reason: ${caseData.mdt_reason||'?'}${caseData.mdt_details ? ' — ' + caseData.mdt_details : ''}
+${caseData.referral_type||'?'} | ${caseData.referring_clinician||'?'} | ${caseData.location||'?'}
+Montreal: ${caseData.montreal||'?'}${caseData.phenotype_detail ? ' — ' + caseData.phenotype_detail : ''}
+${caseData.comorbidities ? 'Comorbidities: ' + caseData.comorbidities + (caseData.bmi ? ' | BMI ' + caseData.bmi : '') : ''}
+Current tx: ${caseData.current_tx||'None'}${caseData.current_tx_notes ? ' — ' + caseData.current_tx_notes : ''}
+${caseData.past_biologics ? 'Past biologics: ' + caseData.biologic_cessation : (caseData.past_tx ? 'Past tx: ' + caseData.past_tx : '')}
+${caseData.surgery && caseData.surgery !== 'No prior surgery' ? 'Surgery: ' + (caseData.surgery_notes || caseData.surgery) : ''}
+${caseData.eim && caseData.eim !== 'None' ? 'EIM: ' + caseData.eim : ''}
+${caseData.endo_findings ? 'Endoscopy: ' + caseData.endo_findings : ''}
+${caseData.histology ? 'Histology: ' + caseData.histology + (caseData.histo_notes ? ' — ' + caseData.histo_notes : '') : ''}
+${caseData.ius_done === 'Yes' ? 'IUS: ' + (caseData.ius_findings||'') + (caseData.ius_bwt ? ' BWT ' + caseData.ius_bwt + 'mm' : '') : ''}
+${bp.length ? 'Bloods: ' + bp.join(' | ') : ''}
+${caseData.other_bloods ? 'Other: ' + caseData.other_bloods : ''}
+${caseData.imaging_modalities && caseData.imaging_modalities !== 'No imaging' ? 'Imaging (' + caseData.imaging_modalities + '): ' + (caseData.imaging_report||'') : ''}
+=== END CASE ===
+
+Respond ONLY with JSON using these exact short keys. No preamble, no markdown:
+${JSON.stringify({s:"2-3 sentence MDT summary",a:"Active|Quiescent|Uncertain",r:"rationale integrating all data",f:["red flag if any"],rl:"High|Moderate|Low",rf:["risk factor with context"],sd:false,sr:"surgical risk note",bt:["biologic tried: reason for failure"],ba:["available mechanism class and PBS agents"],br:"mechanistic rationale for next agent",pf:["patient factor with treatment implication"],t:[{o:"agent",p:"First-line|Second-line|Consider|Avoid",r:"patient-specific rationale",c:"PBS criteria and monitoring"}],d:["MDT question 1","question 2","question 3","question 4"],m:["missing data if any"]})}`;
+
+  try {
+    // Call Anthropic via proxy — browser waits, no Netlify timeout applies
+    const res = await fetch('/.netlify/functions/anthropic-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 2000,
+        system: 'You are an IBD gastroenterologist. Respond ONLY with JSON using the exact short keys requested. No preamble, no markdown.',
+        messages: [
+          { role: 'user', content: prompt },
+          { role: 'assistant', content: '{"s":"' }
+        ]
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'API error');
+
+    const content = data.content[0]?.text || '';
+    const full = '{"s":"' + content;
+    const end = full.lastIndexOf('}');
+    if (end === -1) throw new Error('Incomplete response — please retry');
+    const analysis = JSON.parse(full.slice(0, end + 1));
+    const expanded = expandAnalysis(analysis);
+
+    // Save to Supabase
+    if (savedCaseId) {
+      fetch('/.netlify/functions/update-case', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: savedCaseId, status: 'analysed', ai_analysis: expanded })
+      }).catch(() => {});
+    }
+
+    clearTimeout(loadingTimer);
+    ['load-1','load-2','load-3','load-4'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('active'); el.classList.add('done');
+      el.querySelector('svg').innerHTML = '<path d="M2 6.5l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    });
+    setTimeout(() => {
+      document.getElementById('ai-loading').classList.add('hidden');
+      renderAiResults(expanded);
+    }, 300);
+
+  } catch(err) {
+    clearTimeout(loadingTimer);
+    document.getElementById('ai-loading').classList.add('hidden');
+    document.getElementById('ai-error-msg').textContent = err.message || 'Analysis failed.';
+    document.getElementById('ai-error').classList.remove('hidden');
+  }
+}
+
+function renderAiResults(d) {
+  const statusClass = {Active:'tag-active',Quiescent:'tag-quiescent',Uncertain:'tag-uncertain'}[d.disease_activity?.overall] || 'tag-uncertain';
+  const riskClass = {'High':'tag-active','Moderate':'tag-consider','Low':'tag-quiescent'}[d.risk?.level] || 'tag-uncertain';
+  let html = '';
+
+  // Summary
+  html += aiSec('icon-s', svgDoc(), 'Case Summary', true, `<p>${esc(d.case_summary||'')}</p>`);
+
+  // Disease activity
+  let actHtml = `<p><strong>Overall:</strong> <span class="ai-tag ${statusClass}">${esc(d.disease_activity?.overall||'Not assessed')}</span></p><p>${esc(d.disease_activity?.rationale||'')}</p>`;
+  if (d.disease_activity?.red_flags?.length) {
+    actHtml += '<h4>Red flags</h4>' + d.disease_activity.red_flags.map(f =>
+      `<div class="flag"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 4v3.5M6.5 9.5v.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${esc(f)}</div>`
+    ).join('');
+  }
+  html += aiSec('icon-a', svgActivity(), 'Disease Activity Assessment', true, actHtml);
+
+  // Risk stratification
+  if (d.risk) {
+    let riskHtml = `<p><strong>Risk level:</strong> <span class="ai-tag ${riskClass}">${esc(d.risk.level||'')}</span>`;
+    if (d.risk.steroid_dependent) riskHtml += ` <span class="ai-tag tag-orange">Steroid dependent</span>`;
+    riskHtml += `</p>`;
+    if (d.risk.factors?.length) {
+      riskHtml += '<h4>Risk factors</h4><ul>' + d.risk.factors.map(f => `<li>${esc(f)}</li>`).join('') + '</ul>';
+    }
+    if (d.risk.surgical_risk) riskHtml += `<p style="margin-top:8px;font-size:11px;color:#6a7a8a;">${esc(d.risk.surgical_risk)}</p>`;
+    html += aiSec('icon-risk', svgRisk(), 'Clinical Risk Stratification', true, riskHtml);
+  }
+
+  // Biologic positioning
+  if (d.biologic_positioning) {
+    let bioHtml = '';
+    if (d.biologic_positioning.tried?.length) {
+      bioHtml += '<h4>Tried</h4><ul>' + d.biologic_positioning.tried.map(t => `<li>${esc(t)}</li>`).join('') + '</ul>';
+    }
+    if (d.biologic_positioning.available?.length) {
+      bioHtml += '<h4>Available classes / agents</h4><ul>' + d.biologic_positioning.available.map(a => `<li>${esc(a)}</li>`).join('') + '</ul>';
+    }
+    if (d.biologic_positioning.rationale) {
+      bioHtml += `<p style="margin-top:8px;">${esc(d.biologic_positioning.rationale)}</p>`;
+    }
+    html += aiSec('icon-bio', svgBio(), 'Biologic Positioning', true, bioHtml);
+  }
+
+  // Patient factors
+  if (d.patient_factors?.length) {
+    const pfHtml = '<ul>' + d.patient_factors.map(f => `<li>${esc(f)}</li>`).join('') + '</ul>';
+    html += aiSec('icon-pf', svgPerson(), 'Patient Factors', true, pfHtml);
+  }
+
+  // Treatment options
+  const pClass = {
+    'First-line':'tag-1st','Second-line':'tag-2nd','Consider':'tag-consider','Avoid':'tag-avoid'
+  };
+  let txHtml = (d.treatment_options||[]).map(opt => `
+    <div class="tx-card">
+      <div class="tx-head">
+        <strong>${esc(opt.option||'')}</strong>
+        ${opt.priority ? `<span class="ai-tag ${pClass[opt.priority]||'tag-2nd'}">${esc(opt.priority)}</span>` : ''}
+      </div>
+      <div class="tx-rationale">${esc(opt.rationale||'')}</div>
+      ${opt.considerations ? `<div class="tx-considerations">${esc(opt.considerations)}</div>` : ''}
+    </div>`).join('');
+  html += aiSec('icon-t', svgPill(), 'Treatment Options', true, txHtml);
+
+  // MDT points
+  let mdtHtml = '<ul>' + (d.mdt_discussion_points||[]).map(p => `<li>${esc(p)}</li>`).join('') + '</ul>';
+  if (d.missing_information?.length) {
+    mdtHtml += '<h4>Data gaps</h4><ul>' + d.missing_information.map(m => `<li>${esc(m)}</li>`).join('') + '</ul>';
+  }
+  html += aiSec('icon-d', svgChat(), 'MDT Discussion Points', true, mdtHtml);
+
+  const container = document.getElementById('ai-results');
+  container.innerHTML = html;
+  container.classList.remove('hidden');
+  container.querySelectorAll('.ai-section-header').forEach(h => {
+    h.addEventListener('click', () => {
+      h.nextElementSibling.classList.toggle('open');
+      h.querySelector('.ai-section-toggle').classList.toggle('open');
+    });
+  });
+}
+
+function aiSec(iconClass, iconSvg, title, open, body) {
+  return `<div class="ai-section">
+    <div class="ai-section-header">
+      <div class="ai-section-icon ${iconClass}">${iconSvg}</div>
+      <div class="ai-section-title">${title}</div>
+      <div class="ai-section-toggle ${open?'open':''}">▼</div>
+    </div>
+    <div class="ai-section-body ${open?'open':''}">${body}</div>
+  </div>`;
+}
+
+function svgRisk() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5L13 12.5H1L7 1.5z" stroke="#FFBF46" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 5.5v3M7 10v.5" stroke="#FFBF46" stroke-width="1.2" stroke-linecap="round"/></svg>`; }
+function svgBio() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#8ACB88" stroke-width="1.2"/><path d="M4.5 7h5M7 4.5v5" stroke="#8ACB88" stroke-width="1.2" stroke-linecap="round"/></svg>`; }
+function svgPerson() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4.5" r="2.5" stroke="#648381" stroke-width="1.2"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="#648381" stroke-width="1.2" stroke-linecap="round"/></svg>`; }
+function svgDoc() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="2" stroke="#648381" stroke-width="1.2"/><path d="M4 5h6M4 7.5h6M4 10h4" stroke="#648381" stroke-width="1.2" stroke-linecap="round"/></svg>`; }
+function svgActivity() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h2l2-5 2 9 2-6 1.5 2H13" stroke="#FFBF46" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
+function svgPill() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5.5 2a3.5 3.5 0 000 7h3a3.5 3.5 0 000-7h-3z" stroke="#8ACB88" stroke-width="1.2"/><path d="M7 2v7" stroke="#8ACB88" stroke-width="1.2"/></svg>`; }
+function svgChat() { return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3a1 1 0 011-1h8a1 1 0 011 1v6a1 1 0 01-1 1H8l-3 2v-2H3a1 1 0 01-1-1V3z" stroke="#8ACB88" stroke-width="1.2"/></svg>`; }
+
+function copyAiAnalysis() {
+  const results = document.getElementById('ai-results');
+  if (!results || results.classList.contains('hidden')) return;
+  let text = 'IBD MDT — AI CLINICAL ANALYSIS\n' + new Date().toLocaleString('en-AU') + '\n\n';
+  results.querySelectorAll('.ai-section').forEach(sec => {
+    const title = sec.querySelector('.ai-section-title')?.textContent?.trim() || '';
+    const body = sec.querySelector('.ai-section-body');
+    text += title.toUpperCase() + '\n' + '─'.repeat(40) + '\n' + (body?.innerText?.trim()||'') + '\n\n';
+  });
+  text += 'AI-GENERATED — For MDT preparation only.\n';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('ai-copy-btn');
+    btn.textContent = 'Copied!'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(()=>{});
+}
+
+// Summary
+function row(k,v) { if(!v) return ''; return `<div class="sum-row"><span class="sum-key">${k}</span><span class="sum-val">${v}</span></div>`; }
+function secHead(t,icon='') { return `<div class="sum-section">${icon}${t}</div>`; }
+function triagePill(t) { const n=t.charAt(0); return `<span class="triage-pill triage-${n}">${t}</span>`; }
+
+function buildSummary() {
+  const d = collectData();
+  let html = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;font-weight:500;">Submitted ${new Date().toLocaleString('en-AU')}</div>`;
+  html += secHead('Referral');
+  html += row('Triage', d.triage ? triagePill(d.triage) : '');
+  html += row('Reason', d.mdt_reason.replace(/;/g,','));
+  if (d.mdt_details) html += row('Details', d.mdt_details);
+  html += row('Location', d.location); html += row('Type', d.referral_type);
+  html += row('Clinician', d.referring_clinician); if (d.clinician_email) html += row('Clinician email', d.clinician_email);
+  html += row('Submitter', d.submitter_email);
+  html += secHead('Patient');
+  html += row('Name', d.patient_name); html += row('DOB', d.dob); html += row('Gender', d.gender);
+  if (d.mrn) html += row('MRN', d.mrn);
+  html += secHead('IBD Phenotype');
+  html += row('Montreal', d.montreal); if (d.phenotype_detail) html += row('Detail', d.phenotype_detail);
+  if (d.comorbidities) {
+    html += secHead('Comorbidities');
+    html += row('Comorbidities', d.comorbidities.replace(/;/g,','));
+    if (d.comorbid_other) html += row('Other', d.comorbid_other);
+    if (d.bmi) html += row('BMI', d.bmi + ' kg/m²'); if (d.ecog) html += row('ECOG', d.ecog);
+  }
+  html += secHead('Treatment');
+  html += row('Current', d.current_tx.replace(/;/g,','));
+  if (d.current_tx_notes) html += row('Notes', d.current_tx_notes);
+  if (d.past_tx) html += row('Past', d.past_tx.replace(/;/g,','));
+  if (d.past_biologics) html += row('Past biologics', d.biologic_cessation.replace(/\|/g,' ·'));
+  if (d.surgery || d.eim) {
+    html += secHead('Clinical Features');
+    if (d.surgery) html += row('Surgery', d.surgery); if (d.surgery_notes) html += row('Details', d.surgery_notes);
+    if (d.eim) html += row('EIM', d.eim.replace(/;/g,',')); if (d.eim_notes) html += row('EIM notes', d.eim_notes);
+  }
+  html += secHead('Investigations');
+  if (d.endo_findings) html += row('Endoscopy', d.endo_findings);
+  if (d.histology) html += row('Histology', d.histology.replace(/;/g,',')); if (d.histo_notes) html += row('Histo detail', d.histo_notes);
+  if (d.ius_done==='Yes') { html += row('IUS','Performed'); if (d.ius_findings) html += row('IUS findings', d.ius_findings.replace(/;/g,',')); if (d.ius_bwt) html += row('BWT (mm)', d.ius_bwt); }
+  const bf = ['albumin','crp','wcc','hb','platelets','fcal','alt','ast','alp','ggt','bilirubin','urea','creatinine','egfr'];
+  const bl = ['Alb','CRP','WCC','Hb','Plt','FCalp','ALT','AST','ALP','GGT','Bili','Urea','Cr','eGFR'];
+  const bParts = []; bf.forEach((k,i) => { if(d[k]) bParts.push(`${bl[i]}: ${d[k]}`); });
+  if (bParts.length) { html += secHead('Blood Tests'); if (d.bloods_date) html += row('Date', d.bloods_date); html += row('Results', bParts.join('  ·  ')); if (d.other_bloods) html += row('Other', d.other_bloods); }
+  if (d.imaging_modalities||d.imaging_provider||d.imaging_report) {
+    html += secHead('Imaging');
+    if (d.imaging_modalities) html += row('Modalities', d.imaging_modalities.replace(/;/g,','));
+    if (d.imaging_provider) html += row('Provider', d.imaging_provider);
+    if (d.imaging_report) html += row('Findings', d.imaging_report);
+  }
+  document.getElementById('summary-body').innerHTML = html;
+}
+
+function copySummary() {
+  const body = document.getElementById('summary-body');
+  let text = 'IBD MDT CASE SUMMARY\nSubmitted: ' + new Date().toLocaleString('en-AU') + '\n';
+  body.querySelectorAll('.sum-section,.sum-row').forEach(el => {
+    if (el.classList.contains('sum-section')) text += '\n' + el.textContent.toUpperCase() + '\n' + '─'.repeat(30) + '\n';
+    else { const k=el.querySelector('.sum-key'); const v=el.querySelector('.sum-val'); if(k&&v) text += k.textContent.trim().padEnd(22) + v.textContent.trim() + '\n'; }
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent='Copied!'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  }).catch(()=>{});
+}
+
+function resetForm() {
+  document.querySelectorAll('input[type=text],input[type=email],input[type=date],input[type=number],textarea').forEach(el=>el.value='');
+  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(el=>el.checked=false);
+  document.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+  document.getElementById('cessation-blocks').innerHTML='';
+  document.getElementById('surgery-detail').classList.add('hidden');
+  document.getElementById('imaging-other-wrap').classList.add('hidden');
+  document.getElementById('ius-detail').classList.add('hidden');
+  document.getElementById('form-nav').classList.remove('hidden');
+  document.getElementById('step-nav').classList.remove('hidden');
+  document.getElementById('ai-loading').classList.remove('hidden');
+  document.getElementById('ai-error').classList.add('hidden');
+  document.getElementById('ai-results').classList.add('hidden');
+  savedCaseId = null; currentStep = 1; showStep(1);
+}
+
+// ── DEV PREFILL — remove before go-live ──────────────────
+function prefillTestData() {
+  document.getElementById('submitter-email').value = 'kate.napthali@health.nsw.gov.au';
+  document.querySelector('input[name="triage"][value="2 — Semi-urgent (next available)"]').checked = true;
+  document.querySelector('input[name="mdt-reason"][id="r1"]').checked = true;
+  document.querySelector('input[name="location"][id="loc1"]').checked = true;
+  document.querySelector('input[name="referral-type"][id="rt2"]').checked = true;
+  document.getElementById('referring-clinician').value = 'Kate Napthali';
+  document.getElementById('clinician-email').value = 'kate.napthali@health.nsw.gov.au';
+  document.getElementById('mdt-details').value = 'Ongoing active disease despite optimised biologic therapy. Considering escalation or switch.';
+  document.getElementById('patient-name').value = 'Test Patient';
+  document.getElementById('dob').value = '1985-03-22';
+  document.querySelector('input[name="gender"][id="g2"]').checked = true;
+  document.getElementById('mrn').value = '123456';
+  document.getElementById('montreal').value = 'CD — L3 (ileocolonic)';
+  document.getElementById('phenotype-detail').value = 'B2 stricturing with perianal fistula (B3p). Active luminal disease.';
+  document.querySelector('input[name="comorbid"][id="c14"]').checked = true;
+  document.querySelector('input[name="comorbid"][id="c15"]').checked = true;
+  document.getElementById('bmi').value = '21.4';
+  document.getElementById('ecog').value = '1 — Restricted strenuous activity';
+  document.querySelector('input[name="current-tx"][id="tx2"]').checked = true;
+  document.querySelector('input[name="current-tx"][id="tx7"]').checked = true;
+  document.getElementById('current-tx-notes').value = 'Adalimumab 40mg fortnightly + azathioprine 150mg daily. Combination x18 months. Breakthrough symptoms.';
+  document.querySelector('input[name="past-tx"][id="pt6"]').checked = true;
+  document.getElementById('past-tx-notes').value = 'Infliximab — secondary loss of response at 12 months, ADA antibodies detected.';
+  document.querySelector('input[name="surgery"][id="s0"]').checked = true;
+  document.querySelector('input[name="eim"][id="e1"]').checked = true;
+  document.querySelector('input[name="eim"][id="e7"]').checked = true;
+  document.getElementById('eim-notes').value = 'Peripheral arthropathy both knees, correlates with bowel activity.';
+  document.getElementById('endo-findings').value = 'Ileocolonoscopy 3/12 ago: deep ulceration TI, SES-CD 12. Anastomosis patent. L colon mild patchy inflammation.';
+  document.querySelector('input[name="endo-images"][id="ei1"]').checked = true;
+  document.querySelector('input[name="histo"][id="h1"]').checked = true;
+  document.querySelector('input[name="histo"][id="h3"]').checked = true;
+  document.getElementById('histo-notes').value = 'TI biopsy: active chronic ileitis, architectural distortion. No granulomata. No dysplasia.';
+  document.querySelector('input[name="ius-done"][id="iu1"]').checked = true;
+  document.getElementById('ius-detail').classList.remove('hidden');
+  document.querySelector('input[name="ius"][id="iu-a1"]').checked = true;
+  document.querySelector('input[name="ius"][id="iu-a4"]').checked = true;
+  document.querySelector('input[name="ius"][id="iu-s1"]').checked = true;
+  document.getElementById('ius-bwt').value = '6.2';
+  document.getElementById('ius-notes').value = 'TI BWT 6.2mm, moderate Doppler. No stricture or abscess. Fat wrapping. Minimal improvement vs 6/12 prior.';
+  document.getElementById('b-albumin').value = '32';
+  document.getElementById('b-crp').value = '48';
+  document.getElementById('b-wcc').value = '9.2';
+  document.getElementById('b-hb').value = '108';
+  document.getElementById('b-plt').value = '420';
+  document.getElementById('b-fcal').value = '1840';
+  document.getElementById('b-alt').value = '28';
+  document.getElementById('b-ast').value = '24';
+  document.getElementById('b-alp').value = '72';
+  document.getElementById('b-cr').value = '68';
+  document.getElementById('b-egfr').value = '92';
+  document.getElementById('b-date').value = '2026-04-10';
+  document.getElementById('b-other').value = 'Adalimumab trough 4.2 µg/mL (subtherapeutic). ADA antibodies positive titre 80 AU/mL.';
+  document.querySelector('input[name="imaging-mod"][id="im1"]').checked = true;
+  document.getElementById('imaging-provider').value = 'HIG';
+  document.getElementById('imaging-report').value = 'MRI small bowel: Active ileitis TI, mural thickening 7mm, transmural enhancement. Small perianal fistula, no sphincter involvement. No abscess.';
+}
+
+prefillTestData();
+
+showStep(1);
+</script>
+</body>
+</html>

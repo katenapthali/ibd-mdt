@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastroenterology & Hepatology — MDT Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --mint:      #E4FDE1;
+  --green:     #8ACB88;
+  --teal:      #648381;
+  --charcoal:  #575761;
+  --gold:      #FFBF46;
+  --teal-dark: #4a6260;
+  --teal-deep: #324f4d;
+  --charcoal-light: #6e6e7a;
+  --mint-mid:  #c8f5c4;
+  --white:     #ffffff;
+  --off-white: #f8fdf7;
+  --text:      #2c2c35;
+  --text-mid:  #575761;
+  --text-muted:#8a8a96;
+  --border:    #d4ead2;
+  --shadow-sm: 0 1px 3px rgba(100,131,129,0.10);
+  --shadow-md: 0 4px 16px rgba(100,131,129,0.14);
+  --shadow-lg: 0 12px 40px rgba(100,131,129,0.18);
+  --radius:    10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+html { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); background: var(--off-white); }
+body { min-height: 100vh; }
+
+/* ── HEADER ─────────────────────────────────────────── */
+.site-header {
+  background: var(--teal-deep);
+  padding: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--green);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-text { font-size: 14px; font-weight: 700; color: white; letter-spacing: -0.01em; line-height: 1.2; }
+.logo-sub { font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.55); letter-spacing: 0.04em; text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 20px; }
+.header-badge {
+  font-size: 10px; font-weight: 600; color: var(--gold);
+  background: rgba(255,191,70,0.12);
+  border: 1px solid rgba(255,191,70,0.25);
+  padding: 3px 8px; border-radius: 4px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.header-dept { font-size: 12px; color: rgba(255,255,255,0.45); font-weight: 400; }
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero {
+  padding: 5rem 2.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+  background-image: url("hero-bg.jpeg");
+  background-size: cover;
+  background-position: center 60%;
+  background-repeat: no-repeat;
+}
+/* Dark teal layer — text legibility */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(30,55,52,0.78) 0%, rgba(40,70,65,0.68) 50%, rgba(30,55,52,0.75) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+/* Copper filter — 20% warm copper over image */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(184, 105, 55, 0.20);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 2;
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.025; z-index: 3;
+  background-image: linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 4; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 100px; padding: 5px 14px 5px 8px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.eyebrow-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; color: white;
+  letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.hero h1 span { color: var(--gold); }
+.hero p {
+  font-size: 1.05rem; color: rgba(255,255,255,0.68);
+  max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+.hero-stats {
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 3px; }
+.stat-num { font-size: 1.6rem; font-weight: 800; color: white; letter-spacing: -0.03em; line-height: 1; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── SECTION ─────────────────────────────────────────── */
+.section { max-width: 960px; margin: 0 auto; padding: 3rem 2rem; }
+.section-label {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 700; color: var(--teal);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-title { font-size: 1.4rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.section-sub { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+
+/* ── MODULE GRID ─────────────────────────────────────── */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+.module-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  display: flex; flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  position: relative;
+}
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green);
+}
+.module-card.active { cursor: pointer; }
+.module-card.coming-soon { opacity: 0.55; cursor: default; }
+.module-card.coming-soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.card-accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--green));
+}
+.card-accent.gold { background: linear-gradient(90deg, var(--gold), #f5a623); }
+.card-accent.mint { background: linear-gradient(90deg, var(--green), var(--mint-mid)); }
+.card-accent.charcoal { background: linear-gradient(90deg, var(--charcoal), var(--charcoal-light)); }
+.card-body { padding: 1.4rem 1.5rem 1rem; flex: 1; }
+.card-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+.icon-teal { background: rgba(100,131,129,0.12); }
+.icon-green { background: rgba(138,203,136,0.18); }
+.icon-gold { background: rgba(255,191,70,0.15); }
+.icon-charcoal { background: rgba(87,87,97,0.1); }
+.card-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 5px; letter-spacing: -0.01em; }
+.card-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+.card-footer {
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-tag {
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.tag-live { background: rgba(138,203,136,0.2); color: var(--teal-dark); }
+.tag-soon { background: rgba(87,87,97,0.1); color: var(--charcoal-light); }
+.tag-new { background: rgba(255,191,70,0.2); color: #a06c00; }
+.card-arrow { color: var(--teal); opacity: 0; transition: opacity 0.15s, transform 0.15s; }
+.module-card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+
+/* ── QUICK LINKS ─────────────────────────────────────── */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+.quick-link {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  font-size: 0.825rem; font-weight: 600; color: var(--text);
+  transition: all 0.15s;
+}
+.quick-link:hover { background: var(--mint); border-color: var(--green); color: var(--teal-dark); }
+.quick-link svg { flex-shrink: 0; }
+
+/* ── NOTICE BANNER ───────────────────────────────────── */
+.notice-banner {
+  background: linear-gradient(135deg, var(--mint), #d4f5d0);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-bottom: 3rem;
+}
+.notice-icon { flex-shrink: 0; margin-top: 2px; }
+.notice-title { font-size: 0.875rem; font-weight: 700; color: var(--teal-dark); margin-bottom: 3px; }
+.notice-text { font-size: 0.8rem; color: var(--teal); line-height: 1.6; }
+.notice-text strong { color: var(--teal-dark); }
+
+/* ── FOOTER ──────────────────────────────────────────── */
+.site-footer {
+  background: var(--charcoal);
+  padding: 2rem 2.5rem;
+  margin-top: 2rem;
+}
+.footer-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 1rem; }
+.footer-left { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+.footer-left strong { color: rgba(255,255,255,0.7); font-weight: 600; }
+.footer-right { display: flex; gap: 16px; }
+.footer-link { font-size: 11px; color: rgba(255,255,255,0.35); text-decoration: none; font-weight: 500; }
+.footer-link:hover { color: rgba(255,255,255,0.65); }
+
+/* ── SVG ICONS (inline defs) ─────────────────────────── */
+.svg-icon { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="site-logo">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2C5.13 2 2 5.13 2 9s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm0 3a2 2 0 110 4 2 2 0 010-4zm0 9.5a5.25 5.25 0 01-4.5-2.55C4.52 10.31 7.1 9.5 9 9.5s4.48.81 4.5 2.45A5.25 5.25 0 019 14.5z" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">GI &amp; Hepatology MDT</div>
+      <div class="logo-sub">Hunter New England Health</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <span class="header-dept">John Hunter Hospital</span>
+    <span class="header-badge">Internal</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Gastroenterology &amp; Hepatology Unit</div>
+    <h1>MDT Clinical<br><span>Decision Hub</span></h1>
+    <p>Streamlined case submission, AI-assisted clinical summaries, and agenda management for multidisciplinary team meetings across the unit.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">IBD</div><div class="stat-label">MDT Active</div></div>
+      <div class="stat"><div class="stat-num">AI</div><div class="stat-label">Assisted</div></div>
+      <div class="stat"><div class="stat-num">JHH</div><div class="stat-label">HNELHD</div></div>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="section">
+
+    <!-- NOTICE -->
+    <div class="notice-banner">
+      <div class="notice-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="9" stroke="#648381" stroke-width="1.5"/>
+          <path d="M10 6v5M10 14v.5" stroke="#648381" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="notice-title">Private imaging reports</div>
+        <div class="notice-text">Forward private hospital imaging reports directly to <strong>Katie.Wilson2@health.nsw.gov.au</strong> prior to the meeting. Public PACS/HIG reports are accessible via the network.</div>
+      </div>
+    </div>
+
+    <!-- MDT MODULES -->
+    <div class="section-label">MDT Meetings</div>
+    <div class="section-title">Active modules</div>
+    <div class="section-sub">Submit cases, review AI-generated summaries, and manage meeting agendas.</div>
+
+    <div class="module-grid">
+
+      <!-- IBD MDT — LIVE -->
+      <a href="ibd-mdt-form.html" class="module-card active">
+        <div class="card-accent"></div>
+        <div class="card-body">
+          <div class="card-icon icon-teal">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 2C7.8 2 6 3.8 6 6c0 1.5.8 2.8 2 3.5V11H6.5A1.5 1.5 0 005 12.5v4A1.5 1.5 0 006.5 18h7a1.5 1.5 0 001.5-1.5v-4A1.5 1.5 0 0013.5 11H12V9.5C13.2 8.8 14 7.5 14 6c0-2.2-1.8-4-4-4z" fill="#648381"/>
+            </svg>
+          </div>
+          <div class="card-title">IBD Multidisciplinary Team</div>
+          <div class="card-desc">Case submission with structured phenotype, treatment history, investigations, and AI-assisted clinical analysis for meeting preparation.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag tag-live">Live</span>
+          <svg class="card-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="#648381" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- HEPATOLOGY — COMING SOON -->
+      <div class="module-card coming-soon">
+        <div class="card-accent gold"></div>
+        <div class="card-body">
+          <div class="card-icon icon-gold">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 3C6.7 3 4 5.7 4 9c0 2.1 1.1 4 2.7 5.1L7 17h6l.3-2.9C14.9 13 16 11.1 16 9c0-3.3-2.7-6-6-6z" fill="#FFBF46"/>
+            </svg>
+          </div>
+          <div class="card-title">Hepatology MDT</div>
+          <div class="card-desc">HCC, cirrhosis, portal hypertension, and autoimmune liver disease case review with liver team integration.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag tag-soon">Coming soon</span>
+        </div>
+      </div>
+
+      <!-- ENDOSCOPY PLANNING — COMING SOON -->
+      <div class="module-card coming-soon">
+        <div class="card-accent mint"></div>
+        <div class="card-body">
+          <div class="card-icon icon-green">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="7" stroke="#8ACB88" stroke-width="1.5"/>
+              <circle cx="10" cy="10" r="3" fill="#8ACB88"/>
+              <path d="M10 3v2M10 15v2M3 10h2M15 10h2" stroke="#8ACB88" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="card-title">Endoscopy Unit Planning</div>
+          <div class="card-desc">Waitlist management, procedure volume analysis, and service planning across HNELHD sites.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag tag-soon">Coming soon</span>
+        </div>
+      </div>
+
+      <!-- GENERAL GI MDT — COMING SOON -->
+      <div class="module-card coming-soon">
+        <div class="card-accent charcoal"></div>
+        <div class="card-body">
+          <div class="card-icon icon-charcoal">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="3" y="3" width="6" height="6" rx="2" fill="#575761"/>
+              <rect x="11" y="3" width="6" height="6" rx="2" fill="#575761" opacity=".5"/>
+              <rect x="3" y="11" width="6" height="6" rx="2" fill="#575761" opacity=".5"/>
+              <rect x="11" y="11" width="6" height="6" rx="2" fill="#575761" opacity=".3"/>
+            </svg>
+          </div>
+          <div class="card-title">General GI MDT</div>
+          <div class="card-desc">Upper and lower GI complex case review, motility disorders, and functional GI disease planning.</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag tag-soon">Coming soon</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="section-label">Quick access</div>
+    <div class="section-title">Resources</div>
+    <div class="section-sub">Frequently used tools and references for the unit.</div>
+
+    <div class="quick-links">
+      <a href="ibd-mdt-form.html" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="12" height="12" rx="3" stroke="#648381" stroke-width="1.5"/>
+          <path d="M5 8h6M5 5.5h6M5 10.5h4" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Submit IBD Case
+      </a>
+      <a href="mailto:Katie.Wilson2@health.nsw.gov.au" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="4" width="12" height="9" rx="2" stroke="#648381" stroke-width="1.5"/>
+          <path d="M2 6l6 4 6-4" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Email MDT Coordinator
+      </a>
+      <a href="#" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#648381" stroke-width="1.5"/>
+          <path d="M8 5v3.5l2.5 1.5" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Meeting Schedule
+      </a>
+      <a href="registry.html" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 4h10M3 8h7M3 12h5" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Case Registry
+      </a>
+      <a href="#" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L9.5 6h4l-3 2.5 1 4L8 10l-3.5 2.5 1-4L2.5 6h4z" stroke="#648381" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        Drug Monographs
+      </a>
+      <a href="#" class="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="7" cy="7" r="5" stroke="#648381" stroke-width="1.5"/>
+          <path d="M11 11l3 3" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Patient Search
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <strong>Gastroenterology &amp; Hepatology · John Hunter Hospital</strong><br>
+      Hunter New England Local Health District · NSW Health<br>
+      For clinical use by authorised staff only
+    </div>
+    <div class="footer-right">
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Support</a>
+      <a href="mailto:Katie.Wilson2@health.nsw.gov.au" class="footer-link">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

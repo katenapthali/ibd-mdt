@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBD MDT Case Registry</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --mint: #E4FDE1; --green: #8ACB88; --teal: #648381; --charcoal: #575761; --gold: #FFBF46;
+  --teal-dark: #4a6260; --teal-deep: #324f4d; --teal-light: #e8f2f1; --green-light: #f0faf0;
+  --red: #c0392b; --red-light: #fdf0ee; --white: #ffffff; --off-white: #f8fdf7;
+  --surface: #f2f7f2; --border: #d4ead2; --border-mid: #bcd9ba;
+  --text: #2c2c35; --text-mid: #575761; --text-muted: #8a8a96;
+  --radius: 8px; --radius-lg: 14px;
+  --shadow-md: 0 4px 16px rgba(100,131,129,0.14);
+}
+html { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--off-white); }
+body { min-height: 100vh; }
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--teal-deep); padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.header-back { display: flex; align-items: center; gap: 8px; text-decoration: none; color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 500; transition: color 0.15s; }
+.header-back:hover { color: white; }
+.header-title { font-size: 13px; font-weight: 700; color: white; }
+.header-badge { font-size: 10px; font-weight: 600; color: var(--gold); background: rgba(255,191,70,0.12); border: 1px solid rgba(255,191,70,0.25); padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── PIN SCREEN ── */
+.pin-screen {
+  min-height: calc(100vh - 52px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.pin-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 2.5rem 2rem;
+  max-width: 360px; width: 100%; text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.pin-icon { width: 52px; height: 52px; background: var(--teal-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+.pin-card h2 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 6px; letter-spacing: -0.02em; }
+.pin-card p { font-size: 12px; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+.pin-input {
+  width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 10px 14px; font-size: 16px; font-family: 'Plus Jakarta Sans', sans-serif;
+  text-align: center; letter-spacing: 0.2em; color: var(--text);
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  margin-bottom: 1rem;
+}
+.pin-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(100,131,129,0.12); }
+.pin-input.error { border-color: var(--red); animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.pin-btn {
+  width: 100%; padding: 10px; background: var(--teal); color: white;
+  border: none; border-radius: var(--radius); font-size: 13px; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: background 0.12s;
+}
+.pin-btn:hover { background: var(--teal-dark); }
+.pin-error { font-size: 11px; color: var(--red); margin-top: 8px; display: none; }
+
+/* ── MAIN REGISTRY ── */
+.registry { display: none; }
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px;
+}
+.toolbar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.toolbar-title { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.case-count { font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 100px; }
+.btn-new {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--teal); color: white; border: none;
+  padding: 8px 16px; border-radius: var(--radius); font-size: 12px; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; text-decoration: none;
+  transition: background 0.12s;
+}
+.btn-new:hover { background: var(--teal-dark); }
+
+/* ── FILTER BAR ── */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-pill {
+  font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 100px;
+  border: 1.5px solid var(--border); background: white; color: var(--text-muted);
+  cursor: pointer; transition: all 0.12s;
+}
+.filter-pill:hover { border-color: var(--teal); color: var(--teal); }
+.filter-pill.active { background: var(--teal); border-color: var(--teal); color: white; }
+
+/* ── MEETING GROUP ── */
+.meeting-group { margin-bottom: 2rem; }
+.meeting-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; background: var(--teal-deep);
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer; user-select: none;
+}
+.meeting-header:hover { background: var(--teal-dark); }
+.meeting-date-label { font-size: 13px; font-weight: 700; color: white; flex: 1; }
+.meeting-count { font-size: 10px; font-weight: 600; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 100px; }
+.meeting-toggle { color: rgba(255,255,255,0.6); font-size: 10px; transition: transform 0.2s; }
+.meeting-toggle.open { transform: rotate(180deg); }
+.meeting-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
+
+/* ── CASE ROW ── */
+.case-row {
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.12s;
+  display: grid; grid-template-columns: 28px 1fr auto;
+  gap: 12px; align-items: start;
+}
+.case-row:last-child { border-bottom: none; }
+.case-row:hover { background: var(--teal-light); }
+.case-row.expanded { background: var(--surface); }
+.triage-badge {
+  width: 24px; height: 24px; border-radius: 50%;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.t1 { background: #fdecea; color: #b71c1c; }
+.t2 { background: #fff8e6; color: #a06c00; }
+.t3 { background: var(--teal-light); color: var(--teal-dark); }
+.t4 { background: var(--surface); color: var(--text-muted); }
+.case-main { min-width: 0; }
+.case-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.case-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 5px; }
+.case-montreal { font-size: 12px; color: var(--teal-dark); font-weight: 500; }
+.case-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.status-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+}
+.s-submitted { background: var(--teal-light); color: var(--teal-dark); }
+.s-analysed { background: rgba(138,203,136,0.2); color: #2d6e2d; }
+.s-reviewed { background: rgba(255,191,70,0.2); color: #7a5200; }
+.s-complete { background: rgba(87,87,97,0.1); color: var(--charcoal); }
+.s-deferred { background: var(--red-light); color: var(--red); }
+.case-time { font-size: 10px; color: var(--text-muted); }
+
+/* ── CASE DETAIL ── */
+.case-detail {
+  background: white; border-top: 1px solid var(--border);
+  padding: 16px; display: none;
+  grid-column: 1 / -1;
+}
+.case-detail.open { display: block; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+@media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail-section { background: var(--surface); border-radius: var(--radius); padding: 12px 14px; }
+.detail-section-title { font-size: 10px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.detail-row { display: flex; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.detail-row:last-child { border-bottom: none; }
+.detail-key { color: var(--text-muted); min-width: 130px; flex-shrink: 0; font-weight: 600; font-size: 11px; }
+.detail-val { color: var(--text); font-weight: 500; line-height: 1.5; }
+
+/* ── AI SUMMARY IN DETAIL ── */
+.ai-summary-box {
+  background: #0f1419; border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 1rem;
+}
+.ai-summary-label { font-size: 10px; font-weight: 700; color: #8ACB88; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.ai-dot { width: 6px; height: 6px; background: #8ACB88; border-radius: 50%; }
+.ai-summary-text { font-size: 12px; color: #c9d1d9; line-height: 1.7; margin-bottom: 10px; }
+.ai-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ai-chip {
+  font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px;
+}
+.chip-active { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.25); }
+.chip-quiescent { background: rgba(138,203,136,0.15); color: #8ACB88; border: 1px solid rgba(138,203,136,0.25); }
+.chip-uncertain { background: rgba(255,191,70,0.15); color: #FFBF46; border: 1px solid rgba(255,191,70,0.25); }
+.chip-high { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.25); }
+.chip-moderate { background: rgba(255,191,70,0.15); color: #FFBF46; border: 1px solid rgba(255,191,70,0.25); }
+.chip-low { background: rgba(138,203,136,0.15); color: #8ACB88; border: 1px solid rgba(138,203,136,0.25); }
+.ai-tx-list { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+.ai-tx-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; color: #adbac7; }
+.ai-tx-priority { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+.p-first { background: rgba(138,203,136,0.15); color: #8ACB88; }
+.p-second { background: rgba(100,131,129,0.15); color: #648381; }
+.p-consider { background: rgba(255,191,70,0.15); color: #FFBF46; }
+.p-avoid { background: rgba(248,81,73,0.15); color: #f85149; }
+.ai-points { margin-top: 8px; }
+.ai-point { font-size: 11px; color: #adbac7; padding: 3px 0; border-bottom: 1px solid #1e2a36; display: flex; gap: 8px; }
+.ai-point:last-child { border-bottom: none; }
+.ai-point-num { color: #648381; font-weight: 700; flex-shrink: 0; }
+
+/* ── OUTCOME EDITOR ── */
+.outcome-editor { margin-top: 1rem; }
+.outcome-editor-title { font-size: 11px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.outcome-textarea {
+  width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 10px 12px; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text); resize: vertical; min-height: 80px; outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.outcome-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(100,131,129,0.12); }
+.outcome-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.status-select {
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 7px 12px; font-size: 12px; font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text); outline: none; background: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23648381' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+}
+.btn-save {
+  background: var(--teal); color: white; border: none;
+  padding: 7px 18px; border-radius: var(--radius); font-size: 12px; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: background 0.12s;
+}
+.btn-save:hover { background: var(--teal-dark); }
+.btn-save.saving { opacity: 0.6; cursor: not-allowed; }
+.save-confirm { font-size: 11px; color: var(--teal-dark); display: none; font-weight: 600; }
+.save-confirm.show { display: block; }
+.btn-delete {
+  margin-left: auto;
+  background: none; border: 1.5px solid var(--border);
+  color: var(--text-muted); padding: 7px 14px;
+  border-radius: var(--radius); font-size: 12px; font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+}
+.btn-delete:hover { background: var(--red-light); border-color: var(--red); color: var(--red); }
+.btn-email {
+  background: none; border: 1.5px solid var(--border);
+  color: var(--text-muted); padding: 7px 14px;
+  border-radius: var(--radius); font-size: 12px; font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+  transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+}
+.btn-email:hover { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+.email-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 1rem;
+}
+.email-modal {
+  background: white; border-radius: var(--radius-lg);
+  padding: 1.75rem; max-width: 420px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.email-modal h3 { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; letter-spacing: -0.02em; }
+.email-modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.6; }
+.email-field-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block; }
+.email-input {
+  width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 9px 12px; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  margin-bottom: 1rem;
+}
+.email-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(100,131,129,0.12); }
+.email-modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.btn-cancel { background: none; border: 1.5px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius); font-size: 12px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; }
+.btn-send { background: var(--teal); color: white; border: none; padding: 8px 20px; border-radius: var(--radius); font-size: 12px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.12s; }
+.btn-send:hover { background: var(--teal-dark); }
+.btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── EMPTY / LOADING ── */
+.empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+.empty-state svg { margin: 0 auto 1rem; display: block; opacity: 0.3; }
+.empty-state h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.empty-state p { font-size: 13px; line-height: 1.6; }
+.loading-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 2rem; }
+.loading-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 2px; animation: load 1.2s ease-in-out infinite; }
+@keyframes load { 0%{width:0;margin-left:0} 50%{width:60%;margin-left:20%} 100%{width:0;margin-left:100%} }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="header-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    MDT Hub
+  </a>
+  <div class="header-title">IBD MDT Case Registry</div>
+  <span class="header-badge">Registry</span>
+</header>
+
+<!-- PIN SCREEN -->
+<div class="pin-screen" id="pin-screen">
+  <div class="pin-card">
+    <div class="pin-icon">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <rect x="4" y="9" width="14" height="11" rx="2" stroke="#648381" stroke-width="1.5"/>
+        <path d="M7 9V7a4 4 0 018 0v2" stroke="#648381" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="11" cy="14.5" r="1.5" fill="#648381"/>
+      </svg>
+    </div>
+    <h2>Case Registry</h2>
+    <p>This registry contains patient information. Enter the access passphrase to continue.</p>
+    <input type="password" class="pin-input" id="pin-input" placeholder="Passphrase" autocomplete="off">
+    <button class="pin-btn" onclick="checkPin()">Access Registry</button>
+    <div class="pin-error" id="pin-error">Incorrect passphrase — please try again</div>
+  </div>
+</div>
+
+<!-- REGISTRY -->
+<div class="registry" id="registry">
+  <div class="page-wrap">
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="toolbar-title">Case Registry</div>
+        <span class="case-count" id="case-count">Loading…</span>
+      </div>
+      <a href="ibd-mdt-form.html" class="btn-new">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Submit new case
+      </a>
+    </div>
+
+    <div class="filter-bar" id="filter-bar">
+      <div class="filter-pill active" data-filter="all" onclick="setFilter('all',this)">All cases</div>
+      <div class="filter-pill" data-filter="1" onclick="setFilter('1',this)">🔴 Urgent</div>
+      <div class="filter-pill" data-filter="2" onclick="setFilter('2',this)">🟡 Semi-urgent</div>
+      <div class="filter-pill" data-filter="submitted" onclick="setFilter('submitted',this)">Pending review</div>
+      <div class="filter-pill" data-filter="complete" onclick="setFilter('complete',this)">Complete</div>
+    </div>
+
+    <div class="loading-bar" id="loading-bar"><div class="loading-fill"></div></div>
+
+    <div id="registry-body"></div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+// Change this passphrase before deploying
+const PASSPHRASE = 'ibdmdt2026';
+// ────────────────────────────────────────────────────────────
+
+let allCases = [];
+let activeFilter = 'all';
+
+// ── PIN ──────────────────────────────────────────────────────
+document.getElementById('pin-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPin();
+});
+
+function checkPin() {
+  const val = document.getElementById('pin-input').value;
+  if (val === PASSPHRASE) {
+    document.getElementById('pin-screen').classList.add('hidden');
+    document.getElementById('registry').style.display = 'block';
+    initEmailModal();
+    loadCases();
+  } else {
+    const inp = document.getElementById('pin-input');
+    inp.classList.add('error');
+    document.getElementById('pin-error').style.display = 'block';
+    setTimeout(() => inp.classList.remove('error'), 400);
+    inp.value = '';
+  }
+}
+
+// ── LOAD CASES ───────────────────────────────────────────────
+async function loadCases() {
+  try {
+    const res = await fetch('/.netlify/functions/get-cases');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to load');
+    allCases = Array.isArray(data) ? data : [];
+    document.getElementById('loading-bar').classList.add('hidden');
+    renderRegistry();
+  } catch(err) {
+    document.getElementById('loading-bar').classList.add('hidden');
+    document.getElementById('registry-body').innerHTML = `
+      <div class="empty-state">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.5"/><path d="M20 12v10M20 26v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <h3>Could not load cases</h3>
+        <p>${err.message}</p>
+      </div>`;
+  }
+}
+
+// ── FILTER ───────────────────────────────────────────────────
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderRegistry();
+}
+
+function filteredCases() {
+  if (activeFilter === 'all') return allCases;
+  if (activeFilter === '1') return allCases.filter(c => c.triage === 1);
+  if (activeFilter === '2') return allCases.filter(c => c.triage === 2);
+  if (activeFilter === 'submitted') return allCases.filter(c => c.status === 'submitted' || c.status === 'analysed');
+  if (activeFilter === 'complete') return allCases.filter(c => c.status === 'complete');
+  return allCases;
+}
+
+// ── GROUP BY DATE ─────────────────────────────────────────────
+function groupByDate(cases) {
+  const groups = {};
+  cases.forEach(c => {
+    const d = c.submitted_at ? c.submitted_at.slice(0, 10) : 'Unknown';
+    if (!groups[d]) groups[d] = [];
+    groups[d].push(c);
+  });
+  // Sort dates descending
+  return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
+}
+
+function formatGroupDate(dateStr) {
+  if (dateStr === 'Unknown') return 'Date unknown';
+  const d = new Date(dateStr + 'T00:00:00');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((today - d) / 86400000);
+  const label = d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  if (diff === 0) return `Today — ${label}`;
+  if (diff === 1) return `Yesterday — ${label}`;
+  return label;
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function renderRegistry() {
+  const cases = filteredCases();
+  const count = cases.length;
+  document.getElementById('case-count').textContent = `${count} case${count !== 1 ? 's' : ''}`;
+
+  if (!count) {
+    document.getElementById('registry-body').innerHTML = `
+      <div class="empty-state">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="8" y="6" width="24" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M14 14h12M14 20h12M14 26h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <h3>No cases found</h3>
+        <p>No cases match the current filter.</p>
+      </div>`;
+    return;
+  }
+
+  const groups = groupByDate(cases);
+  let html = '';
+
+  groups.forEach(([date, group], gi) => {
+    const open = gi === 0;
+    html += `<div class="meeting-group">
+      <div class="meeting-header" onclick="toggleGroup('g${gi}')">
+        <div class="meeting-date-label">${formatGroupDate(date)}</div>
+        <span class="meeting-count">${group.length} case${group.length !== 1 ? 's' : ''}</span>
+        <div class="meeting-toggle ${open ? 'open' : ''}" id="gtog-g${gi}">▼</div>
+      </div>
+      <div class="meeting-body" id="gbody-g${gi}" style="${open ? '' : 'display:none'}">`;
+
+    group.forEach(c => {
+      const tNum = c.triage || 4;
+      const statusClass = { submitted:'s-submitted', analysed:'s-analysed', reviewed:'s-reviewed', complete:'s-complete', deferred:'s-deferred', scheduled:'s-submitted' }[c.status] || 's-submitted';
+      const statusLabel = c.status ? c.status.charAt(0).toUpperCase() + c.status.slice(1) : 'Submitted';
+      const submittedTime = c.submitted_at ? new Date(c.submitted_at).toLocaleString('en-AU', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+
+      html += `<div class="case-row" onclick="toggleCase('${c.id}')">
+        <div class="triage-badge t${tNum}">${tNum}</div>
+        <div class="case-main">
+          <div class="case-name">${esc(c.patient_name || 'Unknown patient')}</div>
+          <div class="case-meta">
+            <span>${esc(c.referring_clinician || '')}</span>
+            ${c.dob_raw ? `<span>DOB: ${esc(c.dob_raw)}</span>` : ''}
+            ${c.mrn ? `<span>MRN: ${esc(c.mrn)}</span>` : ''}
+          </div>
+          <div class="case-montreal">${esc(c.montreal || '')}</div>
+          ${c.mdt_reason ? `<div style="font-size:11px;color:var(--text-muted);margin-top:3px;">${esc(c.mdt_reason.replace(/;/g,', '))}</div>` : ''}
+        </div>
+        <div class="case-right">
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+          <span class="case-time">${submittedTime}</span>
+        </div>
+      </div>
+      <div class="case-detail" id="detail-${c.id}">${buildDetail(c)}</div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  document.getElementById('registry-body').innerHTML = html;
+}
+
+function toggleGroup(gid) {
+  const body = document.getElementById('gbody-' + gid);
+  const tog = document.getElementById('gtog-' + gid);
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  tog.classList.toggle('open', !isOpen);
+}
+
+function toggleCase(id) {
+  const detail = document.getElementById('detail-' + id);
+  const row = detail.previousElementSibling;
+  const isOpen = detail.classList.contains('open');
+  detail.classList.toggle('open', !isOpen);
+  row.classList.toggle('expanded', !isOpen);
+}
+
+// ── BUILD DETAIL ──────────────────────────────────────────────
+function buildDetail(c) {
+  let html = '<div class="detail-grid">';
+
+  // Clinical
+  html += `<div class="detail-section">
+    <div class="detail-section-title">Clinical</div>
+    ${dr('Montreal', c.montreal)}
+    ${dr('Current treatment', c.current_tx)}
+    ${dr('Past biologics', c.past_biologics)}
+    ${dr('Surgery', c.surgery)}
+    ${dr('EIM', c.eim)}
+    ${dr('Comorbidities', c.comorbidities)}
+  </div>`;
+
+  // Referral
+  html += `<div class="detail-section">
+    <div class="detail-section-title">Referral</div>
+    ${dr('Triage', c.triage_label)}
+    ${dr('Reason', c.mdt_reason)}
+    ${c.mdt_details ? dr('Details', c.mdt_details) : ''}
+    ${dr('Clinician', c.referring_clinician)}
+    ${dr('Gender', c.gender)}
+    ${dr('Status', c.status)}
+  </div>`;
+
+  html += '</div>';
+
+  // AI Analysis
+  const ai = c.ai_analysis;
+  if (ai) {
+    const actClass = { Active:'chip-active', Quiescent:'chip-quiescent', Uncertain:'chip-uncertain' }[ai.disease_activity?.overall] || 'chip-uncertain';
+    const riskClass = { High:'chip-high', Moderate:'chip-moderate', Low:'chip-low' }[ai.risk?.level] || '';
+
+    html += `<div class="ai-summary-box">
+      <div class="ai-summary-label"><div class="ai-dot"></div>Claude AI Analysis</div>
+      <div class="ai-summary-text">${esc(ai.case_summary || '')}</div>
+      <div class="ai-tags">
+        ${ai.disease_activity?.overall ? `<span class="ai-chip ${actClass}">${esc(ai.disease_activity.overall)}</span>` : ''}
+        ${ai.risk?.level ? `<span class="ai-chip ${riskClass}">${esc(ai.risk.level)} risk</span>` : ''}
+        ${ai.risk?.steroid_dependent ? `<span class="ai-chip chip-moderate">Steroid dependent</span>` : ''}
+        ${(ai.disease_activity?.red_flags||[]).map(f => `<span class="ai-chip chip-high">⚑ ${esc(f)}</span>`).join('')}
+      </div>`;
+
+    if (ai.treatment_options?.length) {
+      html += `<div class="ai-tx-list">`;
+      ai.treatment_options.forEach(t => {
+        const pc = { 'First-line':'p-first','Second-line':'p-second','Consider':'p-consider','Avoid':'p-avoid' }[t.priority] || 'p-second';
+        html += `<div class="ai-tx-item">
+          <span class="ai-tx-priority ${pc}">${esc(t.priority||'')}</span>
+          <span><strong style="color:#e6edf3">${esc(t.option||'')}</strong>${t.considerations ? ' — ' + esc(t.considerations) : ''}</span>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (ai.mdt_discussion_points?.length) {
+      html += `<div class="ai-points" style="margin-top:10px;">`;
+      ai.mdt_discussion_points.forEach((p, i) => {
+        html += `<div class="ai-point"><span class="ai-point-num">${i+1}</span><span>${esc(p)}</span></div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+  }
+
+  // Outcome editor
+  html += `<div class="outcome-editor">
+    <div class="outcome-editor-title">MDT Outcome</div>
+    <textarea class="outcome-textarea" id="outcome-${c.id}" placeholder="Record the MDT decision, management plan, follow-up actions…">${esc(c.mdt_outcome || '')}</textarea>
+    <div class="outcome-actions">
+      <select class="status-select" id="status-${c.id}">
+        <option value="submitted" ${c.status==='submitted'?'selected':''}>Submitted</option>
+        <option value="analysed" ${c.status==='analysed'?'selected':''}>Analysed</option>
+        <option value="scheduled" ${c.status==='scheduled'?'selected':''}>Scheduled</option>
+        <option value="reviewed" ${c.status==='reviewed'?'selected':''}>Reviewed</option>
+        <option value="complete" ${c.status==='complete'?'selected':''}>Complete</option>
+        <option value="deferred" ${c.status==='deferred'?'selected':''}>Deferred</option>
+      </select>
+      <button class="btn-save" onclick="saveOutcome('${c.id}', event)">Save outcome</button>
+      <span class="save-confirm" id="saved-${c.id}">✓ Saved</span>
+      <button class="btn-email" onclick="openEmailModal('${c.id}', event)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2.5" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 4.5l5 3 5-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Email summary
+      </button>
+      <button class="btn-delete" onclick="deleteCase('${c.id}', '${c.patient_name||'this case'}', event)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3h8M5 3V2h2v1M4 3v6h4V3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Delete
+      </button>
+    </div>
+  </div>`;
+
+  return html;
+}
+
+function dr(key, val) {
+  if (!val) return '';
+  return `<div class="detail-row"><span class="detail-key">${key}</span><span class="detail-val">${esc(String(val))}</span></div>`;
+}
+
+// ── SAVE OUTCOME ──────────────────────────────────────────────
+async function saveOutcome(id, event) {
+  event.stopPropagation();
+  const btn = event.target;
+  const outcome = document.getElementById('outcome-' + id)?.value || '';
+  const status = document.getElementById('status-' + id)?.value || 'reviewed';
+
+  btn.textContent = 'Saving…';
+  btn.classList.add('saving');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/.netlify/functions/update-case', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, mdt_outcome: outcome, status })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Save failed');
+
+    // Update local cache
+    const idx = allCases.findIndex(c => c.id === id);
+    if (idx !== -1) { allCases[idx].mdt_outcome = outcome; allCases[idx].status = status; }
+
+    btn.textContent = 'Save outcome';
+    btn.classList.remove('saving');
+    btn.disabled = false;
+    const confirm = document.getElementById('saved-' + id);
+    confirm.classList.add('show');
+    setTimeout(() => confirm.classList.remove('show'), 2500);
+
+  } catch(err) {
+    btn.textContent = 'Save outcome';
+    btn.classList.remove('saving');
+    btn.disabled = false;
+    alert('Save failed: ' + err.message);
+  }
+}
+
+let currentEmailCaseId = null;
+
+function openEmailModal(caseId, event) {
+  event.stopPropagation();
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#324f4d;color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;gap:8px;';
+  toast.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#FFBF46" stroke-width="1.2"/><path d="M7 4v3.5M7 9.5v.3" stroke="#FFBF46" stroke-width="1.2" stroke-linecap="round"/></svg> Email coming soon — domain setup required';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+function closeEmailModal() {
+  document.getElementById('email-modal').classList.add('hidden');
+  currentEmailCaseId = null;
+}
+
+// Close on overlay click — deferred until element exists
+function initEmailModal() {
+  const el = document.getElementById('email-modal');
+  if (el) el.addEventListener('click', function(e) { if (e.target === this) closeEmailModal(); });
+}
+
+async function sendEmail() {
+  const to = document.getElementById('email-to').value.trim();
+  const cc = document.getElementById('email-cc').value.trim();
+  if (!to || !to.includes('@')) {
+    document.getElementById('email-to').focus();
+    return;
+  }
+
+  const c = allCases.find(x => x.id === currentEmailCaseId);
+  if (!c) return;
+
+  const btn = document.getElementById('btn-send-email');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="white" stroke-width="1.2"/></svg> Sending…';
+
+  try {
+    const toList = cc ? [to, cc] : [to];
+    const res = await fetch('/.netlify/functions/send-case-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to: toList, case_data: c })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Send failed');
+
+    closeEmailModal();
+    // Brief success toast
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#324f4d;color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:2000;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
+    toast.textContent = '✓ Summary sent to ' + to;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+
+  } catch(err) {
+    alert('Send failed: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M11.5 1.5L1 5.5l4 2 2 4 4.5-10z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/><path d="M5 7.5l3-3" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg> Send';
+  }
+}
+
+async function deleteCase(id, name, event) {
+  event.stopPropagation();
+  if (!confirm(`Delete case for "${name}"?\n\nThis cannot be undone.`)) return;
+
+  try {
+    const res = await fetch('/.netlify/functions/delete-case', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Delete failed');
+
+    // Remove from local cache and re-render
+    allCases = allCases.filter(c => c.id !== id);
+    renderRegistry();
+
+  } catch(err) {
+    alert('Delete failed: ' + err.message);
+  }
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+<!-- EMAIL MODAL -->
+<div class="email-modal-overlay hidden" id="email-modal">
+  <div class="email-modal">
+    <h3>Email case summary</h3>
+    <p>Send a formatted case summary to the referring clinician or medical records.</p>
+    <label class="email-field-label">To</label>
+    <input type="email" class="email-input" id="email-to" placeholder="clinician@health.nsw.gov.au">
+    <label class="email-field-label">CC (optional)</label>
+    <input type="email" class="email-input" id="email-cc" placeholder="medicalrecords@health.nsw.gov.au">
+    <div class="email-modal-actions">
+      <button class="btn-cancel" onclick="closeEmailModal()">Cancel</button>
+      <button class="btn-send" id="btn-send-email" onclick="sendEmail()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M11.5 1.5L1 5.5l4 2 2 4 4.5-10z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/><path d="M5 7.5l3-3" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
